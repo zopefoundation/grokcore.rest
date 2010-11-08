@@ -1,12 +1,12 @@
 import re
 import unittest, doctest
-import grok
+import grokcore.rest
 
 from pkg_resources import resource_listdir
 from zope.testing import renormalizing
 from zope.app.wsgi.testlayer import BrowserLayer, http
 
-FunctionalLayer = BrowserLayer(grok)
+FunctionalLayer = BrowserLayer(grokcore.rest)
 
 checker = renormalizing.RENormalizing([
     # Accommodate to exception wrapping in newer versions of mechanize
@@ -41,7 +41,7 @@ def suiteFromPackage(name):
         if filename == '__init__.py':
             continue
 
-        dottedname = 'grok.ftests.%s.%s' % (name, filename[:-3])
+        dottedname = 'grokcore.rest.ftests.%s.%s' % (name, filename[:-3])
         test = doctest.DocTestSuite(
             dottedname,
             checker=checker,
@@ -58,10 +58,7 @@ def suiteFromPackage(name):
 
 def test_suite():
     suite = unittest.TestSuite()
-    for name in [
-        'xmlrpc',
-        'traversal', 'form', 'url', 'security', 'rest',
-        'catalog', 'site', 'application', 'viewlet', 'lifecycle']:
+    for name in ['rest']:
         suite.addTest(suiteFromPackage(name))
     return suite
 

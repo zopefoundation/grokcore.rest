@@ -5,8 +5,10 @@ HTTP request in a REST skin for which no more-specific REST behavior has
 been defined.  These all return the HTTP response Method Not Allowed.
 
 """
-import grok
-from grok.interfaces import IRESTSkinType
+import grokcore.component as grok
+import grokcore.rest
+import grokcore.view
+from grokcore.rest.interfaces import IRESTSkinType
 
 from zope import component
 from zope.component.interfaces import ComponentLookupError
@@ -80,7 +82,7 @@ class rest_skin(view):
         return self.context
 
 
-class NotAllowedREST(grok.REST):
+class NotAllowedREST(grokcore.rest.REST):
     """Default REST view, whose methods all raise Not Allowed errors.
 
     By binding itself to ``Interface``, this becomes the most general
@@ -90,7 +92,7 @@ class NotAllowedREST(grok.REST):
     clients attempt to assail them with unwanted HTTP methods.
 
     """
-    grok.layer(grok.IRESTLayer)
+    grokcore.view.layer(grokcore.rest.IRESTLayer)
     grok.context(Interface)
 
     is_not_allowed = True

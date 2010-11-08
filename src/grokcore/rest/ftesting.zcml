@@ -2,57 +2,11 @@
    xmlns="http://namespaces.zope.org/zope"
    xmlns:grok="http://namespaces.zope.org/grok"
    xmlns:browser="http://namespaces.zope.org/browser"
-   i18n_domain="grok"
-   package="grok">
+   i18n_domain="grokcore.rest"
+   package="grokcore.rest">
 
-  <include package="zope.security" file="meta.zcml"/>
-
-  <permission title="grok.test"
-              id="grok.test"/>
-
-  <include package="grok" />
-  <grok:grok package="grok.ftests" />
-
-  <browser:defaultView name="index.html" />
-
-  <securityPolicy
-      component="zope.securitypolicy.zopepolicy.ZopeSecurityPolicy"
-      />
-
-
-  <unauthenticatedPrincipal id="zope.anybody"
-                            title="Unauthenticated User" />
-  <unauthenticatedGroup id="zope.Anybody"
-                        title="Unauthenticated Users" />
-  <authenticatedGroup id="zope.Authenticated"
-                      title="Authenticated Users" />
-  <everybodyGroup id="zope.Everybody"
-                  title="All Users" />
-
-  <grant
-      permission="grok.test"
-      principal="zope.Authenticated"/>
-
-  <grant
-      permission="zope.View"
-      principal="zope.anybody"
-      />
-
-  <principal
-      id="zope.mgr"
-      title="Manager"
-      login="mgr"
-      password="mgrpw"
-      />
-
-  <principal
-      id="sample.user"
-      title="foo"
-      login="foo"
-      password="secret"
-      />
-
-  <role id="zope.Manager" title="Site Manager" />
-  <grantAll role="zope.Manager" />
-  <grant role="zope.Manager" principal="zope.mgr" />
+   <include package="grokcore.view" file="ftesting.zcml"/>
+   <include package="grokcore.rest" />
+   <include package="grokcore.view" file="publication_security.zcml" />
+   <grok:grok package=".ftests" />
 </configure>
