@@ -53,7 +53,7 @@ ILocation and has the appropriate parent pointer:
 import grokcore.component as grok
 from grokcore import view, content, rest, security
 
-class Mammoth(content.Model):
+class Mammoth(content.Container):
 
     def __init__(self, name):
         self.name = name
