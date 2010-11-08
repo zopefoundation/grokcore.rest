@@ -50,22 +50,23 @@ ILocation and has the appropriate parent pointer:
   True
 
 """
-import grok
+import grokcore.component as grok
+from grokcore import view, content, rest, security
 
-class Mammoth(grok.Model):
+class Mammoth(content.Model):
 
     def __init__(self, name):
         self.name = name
 
-class MammothRestLayer(grok.IRESTLayer):
-    grok.restskin('mammoth')
+class MammothRestLayer(rest.IRESTLayer):
+    rest.restskin('mammoth')
 
-class TouchMammoth(grok.Permission):
+class TouchMammoth(security.Permission):
     grok.name('mammoth.Touch')
 
-class MammothRest(grok.REST):
-    grok.layer(MammothRestLayer)
+class MammothRest(rest.REST):
+    view.layer(MammothRestLayer)
 
-    @grok.require(TouchMammoth)
+    @security.require(TouchMammoth)
     def GET(self):
         return self.context.name

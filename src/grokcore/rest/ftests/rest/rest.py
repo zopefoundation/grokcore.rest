@@ -3,7 +3,7 @@ Let's examine Grok's REST support.
 
 Let's create a simple application with REST support::
 
-  >>> from grok.ftests.rest.rest import MyApp
+  >>> from grokcore.rest.ftests.rest.rest import MyApp
   >>> root = getRootFolder()
   >>> root['app'] = MyApp()
   >>> root['app']['alpha'] = MyContent()
@@ -290,41 +290,42 @@ Todo:
 * Content-Type header is there for GET/POST, but not for PUT/DELETE...
 """
 
-import grok
+import grokcore.component as grok
+from grokcore import rest, view, security, content
 from zope.interface import Interface
 
 class IFoo(Interface):
     pass
 
-class MyApp(grok.Container, grok.Application):
+class MyApp(content.Container):
     pass
 
-class MyContent(grok.Model):
+class MyContent(grok.Context):
     pass
 
-class LayerA(grok.IRESTLayer):
-    grok.restskin('a')
+class LayerA(rest.IRESTLayer):
+    rest.restskin('a')
 
-class LayerB(grok.IRESTLayer):
-    grok.restskin('b')
+class LayerB(rest.IRESTLayer):
+    rest.restskin('b')
 
-class LayerC(grok.IRESTLayer):
-    grok.restskin('c')
+class LayerC(rest.IRESTLayer):
+    rest.restskin('c')
 
-class LayerSecurity(grok.IRESTLayer):
-    grok.restskin('e')
+class LayerSecurity(rest.IRESTLayer):
+    rest.restskin('e')
 
-class LayerContent(grok.IRESTLayer):
-    grok.restskin('f')
+class LayerContent(rest.IRESTLayer):
+    rest.restskin('f')
 
-class LayerInterface(grok.IRESTLayer):
-    grok.restskin('g')
+class LayerInterface(rest.IRESTLayer):
+    rest.restskin('g')
 
-class D(grok.IRESTLayer):
-    grok.restskin('d')
+class D(rest.IRESTLayer):
+    rest.restskin('d')
 
-class ARest(grok.REST):
-    grok.layer(LayerA)
+class ARest(rest.REST):
+    view.layer(LayerA)
     grok.context(MyApp)
 
     def GET(self):
@@ -339,8 +340,8 @@ class ARest(grok.REST):
     def DELETE(self):
         return "DELETE"
 
-class BRest(grok.REST):
-    grok.layer(LayerB)
+class BRest(rest.REST):
+    view.layer(LayerB)
     grok.context(MyApp)
 
     def GET(self):
@@ -349,42 +350,42 @@ class BRest(grok.REST):
     def PUT(self):
         return "PUT"
 
-class CRest(grok.REST):
-    grok.layer(LayerC)
+class CRest(rest.REST):
+    view.layer(LayerC)
     grok.context(MyApp)
 
     def some_method_thats_not_in_HTTP(self):
         pass
 
-class DRest(grok.REST):
+class DRest(rest.REST):
     grok.context(MyContent)
 
     def GET(self):
         return "GET2"
 
-class SecurityRest(grok.REST):
+class SecurityRest(rest.REST):
     grok.context(MyContent)
-    grok.layer(LayerSecurity)
+    view.layer(LayerSecurity)
 
-    @grok.require(grok.Public)
+    @security.require(security.Public)
     def GET(self):
         return "GET3"
 
-    @grok.require('zope.ManageContent')
+    @security.require('zope.ManageContent')
     def POST(self):
         return "POST3"
 
-    @grok.require('zope.ManageContent')
+    @security.require('zope.ManageContent')
     def PUT(self):
         return "PUT3"
 
-    @grok.require('zope.ManageContent')
+    @security.require('zope.ManageContent')
     def DELETE(self):
         return "DELETE3"
 
-class BodyTest(grok.REST):
+class BodyTest(rest.REST):
     grok.context(MyContent)
-    grok.layer(LayerContent)
+    view.layer(LayerContent)
 
     def POST(self):
         return self.body
@@ -392,15 +393,15 @@ class BodyTest(grok.REST):
     def PUT(self):
         return self.body
 
-class MyInterfaceContent(grok.Model):
+class MyInterfaceContent(grok.Context):
     grok.implements(IFoo)
 
-class MyNoInterfaceContent(grok.Model):
+class MyNoInterfaceContent(grok.Context):
     grok.implements(IFoo)
 
-class InterfaceRest(grok.REST):
+class InterfaceRest(rest.REST):
     grok.context(IFoo)
-    grok.layer(LayerInterface)
+    view.layer(LayerInterface)
 
     def GET(self):
         return "GET interface registered"
@@ -414,9 +415,9 @@ class InterfaceRest(grok.REST):
     def DELETE(self):
         return "DELETE interface registered"
 
-class NoInterfaceRest(grok.REST):
+class NoInterfaceRest(rest.REST):
     grok.context(MyNoInterfaceContent)
-    grok.layer(LayerInterface)
+    view.layer(LayerInterface)
 
     def GET(self):
         return "GET directly registered"
