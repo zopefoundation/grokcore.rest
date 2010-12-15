@@ -6,7 +6,9 @@
   <!-- Load the grokkers -->
   <include package="grokcore.component" file="meta.zcml" />
   <include package="grokcore.view" file="meta.zcml" />
+  <include package="grokcore.view" file="publication_security.zcml" />
   <include package="grokcore.security" file="meta.zcml" />
+  <include package="grokcore.traverser" file="configure.zcml"/>
   <grok:grok package=".meta" />
 
 </configure>

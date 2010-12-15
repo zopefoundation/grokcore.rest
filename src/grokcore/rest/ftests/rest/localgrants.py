@@ -9,9 +9,7 @@ following model in the root folder.
 For this model we have registered a REST GET view that's protected
 with a permission.  Therefore we can't access it as anonymous:
 
-  >>> print http(r'''
-  ... GET /++rest++mammoth/manfred HTTP/1.1
-  ... ''')
+  >>> print http_call('GET', '/++rest++mammoth/manfred') 
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain
@@ -53,7 +51,7 @@ ILocation and has the appropriate parent pointer:
 import grokcore.component as grok
 from grokcore import view, content, rest, security
 
-class Mammoth(content.Container):
+class Mammoth(content.Model):
 
     def __init__(self, name):
         self.name = name

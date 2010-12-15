@@ -48,6 +48,7 @@ setup(
         'grokcore.component',
         'grokcore.security',
         'grokcore.view',
+        'grokcore.traverser',
         'martian',
         'zope.component',
         'zope.interface',
