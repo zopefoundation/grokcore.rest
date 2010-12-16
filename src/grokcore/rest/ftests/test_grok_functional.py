@@ -30,7 +30,7 @@ def http_call(method, path, data=None, **kw):
     if data is not None:
         request_string += '\r\n'
         request_string += data
-    return http(request_string, handle_errors=True)
+    return http(request_string, handle_errors=False)
 
 def suiteFromPackage(name):
     files = resource_listdir(__name__, name)

@@ -12,15 +12,9 @@
    <include package="grokcore.view" file="publication_security.zcml" />
    <include package="grokcore.rest" />
 
+   <include package="zope.app.http.exception" />
 
-  <browser:defaultView name="index.html" />
-
-<!--
-   <browser:defaultView
-       for="grokcore.content.IContext"
-       name="index"
-       />
--->
-
+   <browser:defaultView name="index.html" />
    <grok:grok package=".ftests" />
+
 </configure>

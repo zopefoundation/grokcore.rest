@@ -40,32 +40,44 @@ from zope.app.publication.requestpublicationfactories import (
     BrowserFactory, HTTPFactory)
 
 
+class GrokHTTPPublication(ZopePublicationSansProxy, HTTPPublication):
+    """Combines `HTTPPublication` with the Grok sans-proxy mixin.
 
-class GrokBrowserPublication(ZopePublicationSansProxy, BrowserPublication):
-    """Combines `BrowserPublication` with the Grok sans-proxy mixin.
-
-    In addition to the three methods that are overridden by the
-    `ZopePublicationSansProxy`, this class overrides a fourth: the
-    `getDefaultTraversal()` method, which strips the security proxy from
-    the object being returned by the normal method.
+    Because `HTTPPublication` provides its own, special `callObject()`
+    implementation, this subclass does the same, providing what is
+    basically the same call (you can verify, in fact, that most of its
+    lines were copied directly from the superclass's version) but with a
+    few extra lines added so that - as with the simpler `callObject()`
+    method in `ZopePublicationSansProxy` - it quickly places a security
+    proxy around the object, makes sure that this HTTP method is
+    permitted, and finally passes the bare object to the view that will
+    render it.
 
     """
-    def getDefaultTraversal(self, request, ob):
-        obj, path = super(GrokBrowserPublication, self).getDefaultTraversal(
-            request, ob)
-        return removeSecurityProxy(obj), path
+    def callObject(self, request, ob):
+        orig = ob
+        if not IHTTPException.providedBy(ob):
+            ob = component.queryMultiAdapter((ob, request),
+                                            name=request.method)
+            checker = selectChecker(ob)
+            if checker is not None:
+                checker.check(ob, '__call__')
+            ob = getattr(ob, request.method, None)
+            if ob is None:
+                raise GrokMethodNotAllowed(orig, request)
+        return mapply(ob, request.getPositionalArguments(), request)
 
 
-class GrokBrowserFactory(BrowserFactory):
-    """Returns the classes Grok uses for browser requests and publication.
+class GrokHTTPFactory(HTTPFactory):
+    """Returns the classes Grok uses for HTTP requests and publication.
 
     When an instance of this class is called, it returns a 2-element
     tuple containing:
 
-    - The request class that Grok uses for browser requests.
-    - The publication class that Grok uses to publish to a browser.
+    - The request class that Grok uses for HTTP requests.
+    - The publication class that Grok uses to publish to HTTP.
 
     """
     def __call__(self):
-        request, publication = super(GrokBrowserFactory, self).__call__()
-        return request, GrokBrowserPublication
+        request, publication = super(GrokHTTPFactory, self).__call__()
+        return request, GrokHTTPPublication
