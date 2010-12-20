@@ -10,10 +10,9 @@ For this model we have registered a REST GET view that's protected
 with a permission.  Therefore we can't access it as anonymous:
 
   >>> print http_call('GET', '/++rest++mammoth/manfred') 
-  HTTP/1.0 401 Unauthorized
-  Content-Length: 0
-  Content-Type: text/plain
-  WWW-Authenticate: basic realm="Zope"
+  Traceback (most recent call last):
+  ...
+  Unauthorized: (<grokcore.rest.meta.MammothRest object at 0...>, '__call__', 'mammoth.Touch')
 
 However, if we make a (local!) grant, e.g. on the root object, we can
 access the view just fine:
