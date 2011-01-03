@@ -1,7 +1,7 @@
 Changes
 *******
 
-0.1 (unreleased)
+1.0 (2011-01-03)
 ================
 
 - Factor out form grok base package 
