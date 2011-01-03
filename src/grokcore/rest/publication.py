@@ -25,19 +25,15 @@ object.
 """
 from grokcore.rest.rest import GrokMethodNotAllowed
 from grokcore.view.publication import ZopePublicationSansProxy
-from zope.security.proxy import removeSecurityProxy
-
 
 from zope import component
 from zope.security.checker import selectChecker
 from zope.publisher.publish import mapply
 from zope.publisher.interfaces.http import IHTTPException
 
-from zope.app.publication.browser import BrowserPublication
-
-from zope.app.publication.http import BaseHTTPPublication, HTTPPublication
+from zope.app.publication.http import HTTPPublication
 from zope.app.publication.requestpublicationfactories import (
-    BrowserFactory, HTTPFactory)
+    HTTPFactory)
 
 
 class GrokHTTPPublication(ZopePublicationSansProxy, HTTPPublication):

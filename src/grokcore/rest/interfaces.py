@@ -24,13 +24,10 @@ import grokcore.security.interfaces
 import grokcore.view.interfaces
 
 
-
 class IBaseClasses(grokcore.component.interfaces.IBaseClasses,
                    grokcore.view.interfaces.IBaseClasses,
                    grokcore.security.interfaces.IBaseClasses):
     REST = interface.Attribute("Base class for REST views.")
-
-
 
 
 class IREST(grokcore.component.interfaces.IGrokcoreComponentAPI,
@@ -44,7 +41,6 @@ class IREST(grokcore.component.interfaces.IGrokcoreComponentAPI,
 
     body = interface.Attribute(
         """The text of the request body.""")
-
 
 
 class IRESTLayer(IHTTPRequest):

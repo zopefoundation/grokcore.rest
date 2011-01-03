@@ -23,7 +23,6 @@ import zope.location
 from zope import interface
 from grokcore.view import ViewSupport
 from grokcore.rest.interfaces import IREST
-from zope.publisher.interfaces.http import IHTTPRequest
 
 
 class REST(zope.location.Location, ViewSupport):

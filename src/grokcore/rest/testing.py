@@ -13,11 +13,8 @@
 ##############################################################################
 """Grok test helpers
 """
-import sys
 from zope.configuration.config import ConfigurationMachine
 from grokcore.component import zcml
-# Provide this import here for BBB reasons:
-from grokcore.component.testing import grok_component
 
 
 def grok(module_name):

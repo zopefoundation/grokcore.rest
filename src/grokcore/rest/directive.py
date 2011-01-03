@@ -19,4 +19,3 @@ class restskin(martian.Directive):
 
     def factory(self, value=None):
         return value
-
