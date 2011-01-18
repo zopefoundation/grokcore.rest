@@ -19,8 +19,8 @@ tests_require = [
     'zope.testing',
     'zope.app.wsgi',
     'zope.app.appsetup',
-    'zope.app.exception',
-    'zope.app.http',
+#    'zope.app.exception',
+#    'zope.app.http',
     'grokcore.content',
     ]
 

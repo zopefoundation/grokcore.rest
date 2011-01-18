@@ -5,7 +5,7 @@ Let's examine Grok's REST support.
   >>> from zope.component import getMultiAdapter
   >>> from grokcore.rest.rest import GrokMethodNotAllowed
 
-  >>> erview = getMultiAdapter((GrokMethodNotAllowed(None, None), 
+  >>> erview = getMultiAdapter((GrokMethodNotAllowed(None, None),
   ...      TestRequest()), name="index.html")
 
   >>> erview
@@ -173,20 +173,44 @@ be public::
 
 POST, PUT and DELETE however are not public::
 
-  >>> print http('POST /++rest++e/app/alpha HTTP/1.1')
+  >>> print http('POST /++rest++e/app/alpha HTTP/1.1', handle_errors=False)
+  Traceback (most recent call last):
+  ...
+  Unauthorized: (<grokcore.rest.meta.SecurityRest object at 0x...>,
+  '__call__', 'zope.ManageContent')
+
+  XXX handle_errors should be set to True once we have a
+  [zope|grokcore].errorview package.
+
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print http('PUT /++rest++e/app/alpha HTTP/1.1')
+  >>> print http('PUT /++rest++e/app/alpha HTTP/1.1', handle_errors=False)
+  Traceback (most recent call last):
+  ...
+  Unauthorized: (<grokcore.rest.meta.SecurityRest object at 0x...>,
+  '__call__', 'zope.ManageContent')
+
+  XXX handle_errors should be set to True once we have a
+  [zope|grokcore].errorview package.
+
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print http('DELETE /++rest++e/app/alpha HTTP/1.1')
+  >>> print http('DELETE /++rest++e/app/alpha HTTP/1.1', handle_errors=False)
+  Traceback (most recent call last):
+  ...
+  Unauthorized: (<grokcore.rest.meta.SecurityRest object at 0x...>,
+  '__call__', 'zope.ManageContent')
+
+  XXX handle_errors should be set to True once we have a
+  [zope|grokcore].errorview package.
+
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   WWW-Authenticate: basic realm="Zope"
@@ -234,7 +258,15 @@ random objects without access:
 
  We shouldn't be allowed to PUT either::
 
-  >>> print http('PUT /app/beta HTTP/1.1')
+  >>> print http('PUT /app/beta HTTP/1.1', handle_errors=False)
+  Traceback (most recent call last):
+  ...
+  NotFound: Object: <grokcore.rest.ftests.rest.rest.MyApp object at 0x...>,
+  name: u'beta'
+
+  XXX handle_errors should be set to True once we have a
+  [zope|grokcore].errorview package.
+
   HTTP/1.0 404 Not Found
   Content-Length: 0
 

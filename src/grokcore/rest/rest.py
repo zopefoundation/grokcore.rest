@@ -15,8 +15,7 @@ from zope.component.interfaces import ComponentLookupError
 from zope.traversing.interfaces import TraversalError
 from zope.traversing.namespace import view
 from zope.interface import Interface
-from zope.publisher.interfaces.http import IHTTPRequest
-from zope.app.publication.http import MethodNotAllowed
+from zope.publisher.interfaces.http import IHTTPRequest, MethodNotAllowed
 from zope.publisher.browser import applySkin
 
 
@@ -63,7 +62,6 @@ class MethodNotAllowedView(grok.MultiAdapter):
         self.request.response.setHeader('Allow', ', '.join(self.allow))
         self.request.response.setStatus(405)
         return 'Method Not Allowed'
-
 
 class rest_skin(view):
     """A rest skin.

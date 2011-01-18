@@ -1,26 +1,42 @@
 <configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:grok="http://namespaces.zope.org/grok">
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:grok="http://namespaces.zope.org/grok">
 
   <include file="meta.zcml" />
 
   <!-- we register a ++rest++ traversal namespace -->
   <adapter
-      factory=".rest.rest_skin"
-      for="* zope.publisher.interfaces.browser.IHTTPRequest"
-      provides="zope.traversing.interfaces.ITraversable"
-      name="rest"
-      />
+    factory=".rest.rest_skin"
+    for="* zope.publisher.interfaces.browser.IHTTPRequest"
+    provides="zope.traversing.interfaces.ITraversable"
+    name="rest"
+  />
 
   <publisher
-      name="HTTP"
-      factory=".publication.GrokHTTPFactory"
-      methods="*"
-      mimetypes="*"
-      priority="1"
-      />
+    name="HTTP"
+    factory=".publication.GrokHTTPFactory"
+    methods="*"
+    mimetypes="*"
+    priority="1"
+  />
 
   <grok:grok package=".rest" />
+
+  <!--
+  XXX temporary registrations copied from zope.app.http.exception;
+  awaiting a [zope|grokcore].errorview package.
+  -->
+  <browser:defaultView
+    for="zope.security.interfaces.IUnauthorized"
+    layer="zope.publisher.interfaces.http.IHTTPRequest"
+    name="index.html"
+  />
+
+  <browser:defaultView
+    for="zope.publisher.interfaces.http.IMethodNotAllowed"
+    layer="zope.publisher.interfaces.http.IHTTPRequest"
+    name="index.html"
+  />
 
 </configure>
