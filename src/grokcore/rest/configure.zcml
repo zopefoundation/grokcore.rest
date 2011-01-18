@@ -23,20 +23,4 @@
 
   <grok:grok package=".rest" />
 
-  <!--
-  XXX temporary registrations copied from zope.app.http.exception;
-  awaiting a [zope|grokcore].errorview package.
-  -->
-  <browser:defaultView
-    for="zope.security.interfaces.IUnauthorized"
-    layer="zope.publisher.interfaces.http.IHTTPRequest"
-    name="index.html"
-  />
-
-  <browser:defaultView
-    for="zope.publisher.interfaces.http.IMethodNotAllowed"
-    layer="zope.publisher.interfaces.http.IHTTPRequest"
-    name="index.html"
-  />
-
 </configure>

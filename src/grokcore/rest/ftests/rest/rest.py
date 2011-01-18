@@ -173,44 +173,20 @@ be public::
 
 POST, PUT and DELETE however are not public::
 
-  >>> print http('POST /++rest++e/app/alpha HTTP/1.1', handle_errors=False)
-  Traceback (most recent call last):
-  ...
-  Unauthorized: (<grokcore.rest.meta.SecurityRest object at 0x...>,
-  '__call__', 'zope.ManageContent')
-
-  XXX handle_errors should be set to True once we have a
-  [zope|grokcore].errorview package.
-
+  >>> print http('POST /++rest++e/app/alpha HTTP/1.1')
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print http('PUT /++rest++e/app/alpha HTTP/1.1', handle_errors=False)
-  Traceback (most recent call last):
-  ...
-  Unauthorized: (<grokcore.rest.meta.SecurityRest object at 0x...>,
-  '__call__', 'zope.ManageContent')
-
-  XXX handle_errors should be set to True once we have a
-  [zope|grokcore].errorview package.
-
+  >>> print http('PUT /++rest++e/app/alpha HTTP/1.1')
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print http('DELETE /++rest++e/app/alpha HTTP/1.1', handle_errors=False)
-  Traceback (most recent call last):
-  ...
-  Unauthorized: (<grokcore.rest.meta.SecurityRest object at 0x...>,
-  '__call__', 'zope.ManageContent')
-
-  XXX handle_errors should be set to True once we have a
-  [zope|grokcore].errorview package.
-
+  >>> print http('DELETE /++rest++e/app/alpha HTTP/1.1')
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   WWW-Authenticate: basic realm="Zope"
@@ -258,15 +234,7 @@ random objects without access:
 
  We shouldn't be allowed to PUT either::
 
-  >>> print http('PUT /app/beta HTTP/1.1', handle_errors=False)
-  Traceback (most recent call last):
-  ...
-  NotFound: Object: <grokcore.rest.ftests.rest.rest.MyApp object at 0x...>,
-  name: u'beta'
-
-  XXX handle_errors should be set to True once we have a
-  [zope|grokcore].errorview package.
-
+  >>> print http('PUT /app/beta HTTP/1.1')
   HTTP/1.0 404 Not Found
   Content-Length: 0
 

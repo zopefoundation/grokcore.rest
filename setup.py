@@ -14,14 +14,13 @@ long_description = (
     )
 
 tests_require = [
-    'grokcore.view [test]',
-    'grokcore.view [security_publication]',
-    'zope.testing',
-    'zope.app.wsgi',
-    'zope.app.appsetup',
-#    'zope.app.exception',
-#    'zope.app.http',
     'grokcore.content',
+    'grokcore.view [security_publication]',
+    'grokcore.view [test]',
+    'zope.app.appsetup',
+    'zope.app.wsgi',
+    'zope.errorview',
+    'zope.testing',
     ]
 
 setup(
