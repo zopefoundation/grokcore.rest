@@ -1,14 +1,14 @@
 Changes
 *******
 
-1.1 (unreleased)
+1.1 (2011-01-20)
 ================
 
-- Nothing changed yet.
-
+- Use zope.errorview in the functional tests to get rid of the zope.app.http
+  dependency.
 
 1.0 (2011-01-03)
 ================
 
-- Factor out form grok base package 
+- Factor out form grok base package
 
