@@ -28,6 +28,7 @@ def http_call(method, path, data=None, **kw):
     for key, value in kw.items():
         request_string += '%s: %s\n' % (key, value)
     if data is not None:
+        request_string += 'Content-Length:%s\n' % len(data)
         request_string += '\r\n'
         request_string += data
     return http(request_string, handle_errors=False)
