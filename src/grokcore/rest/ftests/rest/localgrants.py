@@ -9,7 +9,7 @@ following model in the root folder.
 For this model we have registered a REST GET view that's protected
 with a permission.  Therefore we can't access it as anonymous:
 
-  >>> print http_call('GET', '/++rest++mammoth/manfred') 
+  >>> print http_call('GET', '/++rest++mammoth/manfred')
   Traceback (most recent call last):
   ...
   Unauthorized: (<grokcore.rest.meta.MammothRest object at 0...>, '__call__', 'mammoth.Touch')
@@ -23,9 +23,7 @@ access the view just fine:
 
 With the grant in place we can access it as anonymous:
 
-  >>> print http(r'''
-  ... GET /++rest++mammoth/manfred HTTP/1.1
-  ... ''')
+  >>> print http('GET /++rest++mammoth/manfred HTTP/1.1')
   HTTP/1.0 200 Ok
   Content-Length: 7
   Content-Type: text/plain
