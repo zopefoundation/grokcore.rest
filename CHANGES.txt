@@ -2,10 +2,10 @@
 Changes
 =======
 
-1.2 (unreleased)
+1.2 (2011-04-04)
 ================
 
-- Nothing changed yet.
+- Minor test fixes.
 
 1.1 (2011-01-20)
 ================
