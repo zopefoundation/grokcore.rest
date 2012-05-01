@@ -24,16 +24,20 @@ import grokcore.security.interfaces
 import grokcore.view.interfaces
 
 
-class IBaseClasses(grokcore.component.interfaces.IBaseClasses,
-                   grokcore.view.interfaces.IBaseClasses,
-                   grokcore.security.interfaces.IBaseClasses):
+class IBaseClasses(
+    grokcore.component.interfaces.IBaseClasses,
+    grokcore.view.interfaces.IBaseClasses,
+    grokcore.security.interfaces.IBaseClasses
+    ):
     REST = interface.Attribute("Base class for REST views.")
 
 
-class IGrokcoreRestAPI(grokcore.component.interfaces.IGrokcoreComponentAPI,
-            grokcore.security.interfaces.IGrokcoreSecurityAPI,
-            grokcore.view.interfaces.IGrokcoreViewAPI,
-            IBaseClasses):
+class IGrokcoreRestAPI(
+    grokcore.component.interfaces.IGrokcoreComponentAPI,
+    grokcore.security.interfaces.IGrokcoreSecurityAPI,
+    grokcore.view.interfaces.IGrokcoreViewAPI,
+    IBaseClasses
+    ):
 
     IRESTSkinType = interface.Attribute('The REST skin type')
 
@@ -42,6 +46,13 @@ class IGrokcoreRestAPI(grokcore.component.interfaces.IGrokcoreComponentAPI,
 
     context = interface.Attribute(
         "Object that the REST handler presents.")
+
+    request = interface.Attribute(
+        "Request that REST handler was looked up with.")
+
+
+class IREST(interface.Interface):
+    context = interface.Attribute("Object that the REST handler presents.")
 
     request = interface.Attribute(
         "Request that REST handler was looked up with.")
