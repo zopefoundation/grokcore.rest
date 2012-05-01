@@ -30,17 +30,21 @@ class IBaseClasses(grokcore.component.interfaces.IBaseClasses,
     REST = interface.Attribute("Base class for REST views.")
 
 
-class IREST(grokcore.component.interfaces.IGrokcoreComponentAPI,
+class IGrokcoreRestAPI(grokcore.component.interfaces.IGrokcoreComponentAPI,
             grokcore.security.interfaces.IGrokcoreSecurityAPI,
             grokcore.view.interfaces.IGrokcoreViewAPI,
             IBaseClasses):
-    context = interface.Attribute("Object that the REST handler presents.")
 
-    request = interface.Attribute("Request that REST handler was looked"
-                                  "up with.")
+    IRESTSkinType = interface.Attribute('The REST skin type')
 
     body = interface.Attribute(
         """The text of the request body.""")
+
+    context = interface.Attribute(
+        "Object that the REST handler presents.")
+
+    request = interface.Attribute(
+        "Request that REST handler was looked up with.")
 
 
 class IRESTLayer(IHTTPRequest):
