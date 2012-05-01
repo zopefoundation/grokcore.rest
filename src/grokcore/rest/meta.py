@@ -29,7 +29,6 @@ from zope.interface.interface import InterfaceClass
 import martian
 import grokcore.rest
 import grokcore.component
-import grokcore.component.util
 import grokcore.view
 import grokcore.security
 
@@ -68,7 +67,7 @@ class RESTGrokker(martian.MethodGrokker):
         adapts = (context, layer)
         config.action(
             discriminator=('adapter', adapts, interface.Interface, name),
-            callable=grokcore.component.util.provideAdapter,
+            callable=grokcore.component.provideAdapter,
             args=(method_view, adapts, interface.Interface, name),
             )
         config.action(
@@ -118,7 +117,7 @@ class RestskinInterfaceDirectiveGrokker(martian.InstanceGrokker):
 
         config.action(
             discriminator=('restprotocol', restskin),
-            callable=grokcore.component.util.provideInterface,
+            callable=grokcore.component.provideInterface,
             args=(restskin, interface, grokcore.rest.IRESTSkinType))
 
         return True
