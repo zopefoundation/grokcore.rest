@@ -15,11 +15,11 @@
 from grokcore.component import *
 from grokcore.security import *
 from grokcore.view import *
-
+from grokcore.rest.interfaces import IREST
+from grokcore.rest.interfaces import IRESTLayer
+from grokcore.rest.interfaces import IRESTSkinType
 from grokcore.rest.components import REST
 from grokcore.rest.directive import restskin
-
-from grokcore.rest.interfaces import IREST, IRESTLayer, IRESTSkinType
 from zope.interface import moduleProvides
 moduleProvides(IREST)
 __all__ = list(IREST)
