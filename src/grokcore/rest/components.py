@@ -20,14 +20,14 @@ provided here.
 """
 import zope.location
 
-from zope import interface
+from zope.interface import implementer
 from grokcore.view import ViewSupport
 from grokcore.rest.interfaces import IREST
 
 
+@implementer(IREST)
 class REST(zope.location.Location, ViewSupport):
     """Base class for REST views in Grok applications."""
-    interface.implements(IREST)
 
     def __init__(self, context, request):
         self.context = self.__parent__ = context
