@@ -167,8 +167,8 @@ We can also try this with a completely made-up request method, like FROG::
 
   >>> print(http(wsgi_app(), b'FROG /++rest++b/app HTTP/1.1'))
   HTTP/1.0 405 Method Not Allowed
-  Content-Length: 18
   Allow: GET, PUT
+  Content-Length: 18
   <BLANKLINE>
   Method Not Allowed
 
@@ -242,8 +242,8 @@ random objects without access:
 
   >>> print(http(wsgi_app(), b'DELETE /app/alpha HTTP/1.1'))
   HTTP/1.0 405 Method Not Allowed
-  Content-Length: 18
   Allow:
+  Content-Length: 18
   Method Not Allowed
 
  We shouldn't be allowed to PUT either::
