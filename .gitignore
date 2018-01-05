@@ -1,6 +1,8 @@
-*.pyc
-.installed.cfg
 __pycache__
+.coverage
+.installed.cfg
+.tox
+*.pyc
 bin
 develop-eggs
 parts

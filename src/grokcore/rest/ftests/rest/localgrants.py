@@ -9,10 +9,12 @@ following model in the root folder.
 For this model we have registered a REST GET view that's protected
 with a permission.  Therefore we can't access it as anonymous:
 
-  >>> print http_call('GET', '/++rest++mammoth/manfred')
+  >>> print(http_call(wsgi_app(), 'GET', '/++rest++mammoth/manfred HTTP/1.1'))
   Traceback (most recent call last):
   ...
-  Unauthorized: (<grokcore.rest.meta.MammothRest object at 0...>, '__call__', 'mammoth.Touch')
+  zope.security.interfaces.Unauthorized: \
+  (<grokcore.rest.meta.MammothRest object at 0...>, \
+  '__call__', 'mammoth.Touch')
 
 However, if we make a (local!) grant, e.g. on the root object, we can
 access the view just fine:
@@ -23,10 +25,10 @@ access the view just fine:
 
 With the grant in place we can access it as anonymous:
 
-  >>> print http('GET /++rest++mammoth/manfred HTTP/1.1')
+  >>> print(http(wsgi_app(), b'GET /++rest++mammoth/manfred HTTP/1.1'))
   HTTP/1.0 200 Ok
   Content-Length: 7
-  Content-Type: text/plain
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   manfred
 

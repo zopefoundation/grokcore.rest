@@ -1,19 +1,33 @@
-import re
-import unittest, doctest
+import doctest
 import grokcore.rest
+import grokcore.rest.testing
+import re
+import six
+import unittest
+import zope.app.wsgi.testlayer
+import zope.testbrowser.wsgi
 
 from pkg_resources import resource_listdir
+from zope.app.wsgi.testlayer import http
 from zope.testing import renormalizing
-from zope.app.wsgi.testlayer import BrowserLayer, http
 
-FunctionalLayer = BrowserLayer(grokcore.rest)
+
+class Layer(
+        zope.testbrowser.wsgi.TestBrowserLayer,
+        zope.app.wsgi.testlayer.BrowserLayer):
+    pass
+
+
+layer = Layer(grokcore.rest, allowTearDown=True)
+
 
 checker = renormalizing.RENormalizing([
     # Accommodate to exception wrapping in newer versions of mechanize
     (re.compile(r'httperror_seek_wrapper:', re.M), 'HTTPError:'),
     ])
 
-def http_call(method, path, data=None, **kw):
+
+def http_call(app, method, path, data=None, **kw):
     """Function to help make RESTful calls.
 
     method - HTTP method to use
@@ -31,7 +45,10 @@ def http_call(method, path, data=None, **kw):
         request_string += 'Content-Length:%s\n' % len(data)
         request_string += '\r\n'
         request_string += data
-    return http(request_string, handle_errors=False)
+    if six.PY3:
+        request_string = request_string.encode()
+    return http(app, request_string, handle_errors=False)
+
 
 def suiteFromPackage(name):
     files = resource_listdir(__name__, name)
@@ -46,16 +63,22 @@ def suiteFromPackage(name):
         test = doctest.DocTestSuite(
             dottedname,
             checker=checker,
-            extraglobs=dict(http_call=http_call,
-                            http=http,
-                            getRootFolder=FunctionalLayer.getRootFolder),
-            optionflags=(doctest.ELLIPSIS+
-                         doctest.NORMALIZE_WHITESPACE+
-                         doctest.REPORT_NDIFF))
-        test.layer = FunctionalLayer
+            extraglobs=dict(
+                bprint=grokcore.rest.testing.bprint,
+                getRootFolder=layer.getRootFolder,
+                http_call=http_call,
+                http=http,
+                wsgi_app=layer.make_wsgi_app),
+            optionflags=(
+                doctest.ELLIPSIS +
+                doctest.NORMALIZE_WHITESPACE +
+                doctest.REPORT_NDIFF +
+                renormalizing.IGNORE_EXCEPTION_MODULE_IN_PYTHON2))
+        test.layer = layer
 
         suite.addTest(test)
     return suite
+
 
 def test_suite():
     suite = unittest.TestSuite()
