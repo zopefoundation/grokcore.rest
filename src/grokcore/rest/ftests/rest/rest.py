@@ -140,7 +140,7 @@ According to the HTTP spec, in case of a 405 Method Not Allowed error,
 the response MUST include an Allow header containing a list of valid
 methods for the requested resource::
 
-  >>> print(http(wsgi_app(), b'POST /++rest++b/app HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'POST', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
@@ -148,14 +148,15 @@ methods for the requested resource::
   <BLANKLINE>
   Method Not Allowed
 
-  >>> print(http(wsgi_app(), b'DELETE /++rest++b/app HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'DELETE', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   Method Not Allowed
 
-  >>> print(http(wsgi_app(), b'POST /++rest++c/app HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'POST', '/++rest++c/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
@@ -165,17 +166,18 @@ methods for the requested resource::
 
 We can also try this with a completely made-up request method, like FROG::
 
-  >>> print(http(wsgi_app(), b'FROG /++rest++b/app HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'FROG', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   Method Not Allowed
 
 Let's now see whether security works properly with REST. GET should
 be public::
 
-  >>> print(http(wsgi_app(), b'GET /++rest++e/app/alpha HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'GET', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 200 Ok
   Content-Length: 4
   Content-Type: text/plain;charset=utf-8
@@ -184,22 +186,24 @@ be public::
 
 POST, PUT and DELETE however are not public::
 
-  >>> print(http(wsgi_app(), b'POST /++rest++e/app/alpha HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'POST', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print(http(wsgi_app(), b'PUT /++rest++e/app/alpha HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'PUT', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print(http(wsgi_app(), b'DELETE /++rest++e/app/alpha HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'DELETE', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
@@ -211,9 +215,9 @@ entirely new resource, similar to what is contained in a PUT body. We
 therefore need to have some easy way to get to this information. The 'body'
 attribute on the REST view contains the uploaded data::
 
-  >>> bprint(http_call(
+  >>> print(http_call(
   ...     wsgi_app(), 'POST', 'http://localhost/++rest++f/app/alpha',
-  ...     b'this is the POST body'))
+  ...     'this is the POST body'))
   HTTP/1.0 200 Ok
   Content-Length: 21
   Content-Type: text/plain;charset=utf-8
@@ -222,35 +226,38 @@ attribute on the REST view contains the uploaded data::
 
 This works with PUT as well::
 
-  >>> bprint(http_call(
+  >>> print(http_call(
   ...    wsgi_app(), 'PUT', 'http://localhost/++rest++f/app/alpha',
-  ...    b'this is the PUT body'))
+  ...    'this is the PUT body'))
   HTTP/1.0 200 Ok
-  Allow:
   Content-Length: 20
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   this is the PUT body
 
 Opening up the publication for REST doesn't mean we can just delete
 random objects without access:
 
-  >>> print(http(wsgi_app(), b'DELETE /app HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'DELETE', '/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
+  Content-Type: text/plain;charset=utf-8
   Method Not Allowed
 
-  >>> print(http(wsgi_app(), b'DELETE /app/alpha HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'DELETE', '/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
+  Content-Type: text/plain;charset=utf-8
   Method Not Allowed
 
  We shouldn't be allowed to PUT either::
 
-  >>> print(http(wsgi_app(), b'PUT /app/beta HTTP/1.1'))
+  >>> print(http_call(wsgi_app(), 'PUT', '/app/beta HTTP/1.1', handle_errors=True))
   HTTP/1.0 404 Not Found
   Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
 
 XXX shouldn't this really give a FORBIDDEN response?
 
@@ -343,26 +350,32 @@ class ARest(rest.REST):
     grok.context(MyApp)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET"
 
     def POST(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "POST"
 
     def PUT(self):
-        return b"PUT"
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return "PUT"
 
     def DELETE(self):
-        return b"DELETE"
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return "DELETE"
 
 class BRest(rest.REST):
     view.layer(LayerB)
     grok.context(MyApp)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET"
 
     def PUT(self):
-        return b"PUT"
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return "PUT"
 
 class CRest(rest.REST):
     view.layer(LayerC)
@@ -375,6 +388,7 @@ class DRest(rest.REST):
     grok.context(MyContent)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET2"
 
 class SecurityRest(rest.REST):
@@ -383,29 +397,35 @@ class SecurityRest(rest.REST):
 
     @security.require(security.Public)
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET3"
 
     @security.require('zope.ManageContent')
     def POST(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "POST3"
 
     @security.require('zope.ManageContent')
     def PUT(self):
-        return b"PUT3"
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return "PUT3"
 
     @security.require('zope.ManageContent')
     def DELETE(self):
-        return b"DELETE3"
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return "DELETE3"
 
 class BodyTest(rest.REST):
     grok.context(MyContent)
     view.layer(LayerContent)
 
     def POST(self):
-        return self.body
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return self.body.decode()
 
     def PUT(self):
-        return self.body
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return self.body.decode()
 
 @implementer(IFoo)
 class MyInterfaceContent(grok.Context):
@@ -420,23 +440,29 @@ class InterfaceRest(rest.REST):
     view.layer(LayerInterface)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET interface registered"
 
     def POST(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "POST interface registered"
 
     def PUT(self):
-        return b"PUT interface registered"
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return "PUT interface registered"
 
     def DELETE(self):
-        return b"DELETE interface registered"
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return "DELETE interface registered"
 
 class NoInterfaceRest(rest.REST):
     grok.context(MyNoInterfaceContent)
     view.layer(LayerInterface)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET directly registered"
 
     def PUT(self):
-        return b"PUT directly registered"
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return "PUT directly registered"

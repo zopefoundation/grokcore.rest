@@ -27,7 +27,7 @@ checker = renormalizing.RENormalizing([
     ])
 
 
-def http_call(app, method, path, data=None, **kw):
+def http_call(app, method, path, data=None, handle_errors=False, **kw):
     """Function to help make RESTful calls.
 
     method - HTTP method to use
@@ -35,19 +35,21 @@ def http_call(app, method, path, data=None, **kw):
     data - (body) data to submit
     kw - any request parameters
     """
-
     if path.startswith('http://localhost'):
         path = path[len('http://localhost'):]
-    request_string = '%s %s HTTP/1.1\n' % (method, path)
+    request_string = '{} {} HTTP/1.1\n'.format(method, path)
     for key, value in kw.items():
-        request_string += '%s: %s\n' % (key, value)
+        request_string += '{}: {}\n'.format(key, value)
     if data is not None:
-        request_string += 'Content-Length:%s\n' % len(data)
+        request_string += 'Content-Length:{}\n'.format(len(data))
         request_string += '\r\n'
         request_string += data
+
     if six.PY3:
         request_string = request_string.encode()
-    return http(app, request_string, handle_errors=False)
+
+    result = http(app, request_string, handle_errors=handle_errors)
+    return result
 
 
 def suiteFromPackage(name):
