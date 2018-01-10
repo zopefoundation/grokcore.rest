@@ -20,175 +20,190 @@ Let's create a simple application with REST support::
 
 Issue a GET request::
 
-  >>> response = http_call('GET', 'http://localhost/++rest++a/app')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++a/app')
+  >>> bprint(response.getBody())
   GET
 
 Issue a POST request::
 
-  >>> response = http_call('POST', 'http://localhost/++rest++a/app')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++a/app')
+  >>> bprint(response.getBody())
   POST
 
 Issue a PUT request::
 
-  >>> response = http_call('PUT', 'http://localhost/++rest++a/app')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++a/app')
+  >>> bprint(response.getBody())
   PUT
 
 Issue a DELETE request::
 
-  >>> response = http_call('DELETE', 'http://localhost/++rest++a/app')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++a/app')
+  >>> bprint(response.getBody())
   DELETE
 
 Let's examine a rest protocol b which has no POST or DELETE request defined::
 
 The GET request works as expected::
 
-  >>> response = http_call('GET', 'http://localhost/++rest++b/app')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++b/app')
+  >>> bprint(response.getBody())
   GET
 
 So does the PUT request::
 
-  >>> response = http_call('PUT', 'http://localhost/++rest++b/app')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++b/app')
+  >>> bprint(response.getBody())
   PUT
 
 POST is not defined, however, and we should get a 405 (Method not
 allowed) error::
 
-  >>> response = http_call('POST', 'http://localhost/++rest++b/app')
+  >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++b/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...>,
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...>,
   <zope.publisher.browser.BrowserRequest instance URL=http://localhost/++rest++b/app>
 
 DELETE is also not defined, so we also expect a 405 error::
 
-  >>> response = http_call('DELETE', 'http://localhost/++rest++b/app')
+  >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++b/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...>,
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...>,
   <zope.publisher.http.HTTPRequest instance URL=http://localhost/++rest++b/app>
 
 Let's examine protocol c where no method is allowed::
 
-  >>> response = http_call('GET', 'http://localhost/++rest++c/app')
+  >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++c/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...
-  >>> response = http_call('POST', 'http://localhost/++rest++c/app')
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...
+  >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++c/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...
-  >>> response = http_call('PUT', 'http://localhost/++rest++c/app')
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...
+  >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++c/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...
-  >>> response = http_call('DELETE', 'http://localhost/++rest++c/app')
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...
+  >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++c/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...
 
 Let's examine the default protocol d, where nothing should work as well::
 
-  >>> response = http_call('GET', 'http://localhost/++rest++d/app')
+  >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++d/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...
-  >>> response = http_call('POST', 'http://localhost/++rest++d/app')
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...
+  >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++d/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...
-  >>> response = http_call('PUT', 'http://localhost/++rest++d/app')
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...
+  >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++d/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...
-  >>> response = http_call('DELETE', 'http://localhost/++rest++d/app')
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...
+  >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++d/app')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyApp object at ...
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyApp object at ...
 
 We have added support for GET for the ``alpha`` subobject only, in
 the default rest layer::
 
-  >>> response = http_call('GET', 'http://localhost/++rest++d/app/alpha')
-  >>> response.getBody()
-  'GET2'
+  >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++d/app/alpha')
+  >>> bprint(response.getBody())
+  GET2
 
 But not for POST::
 
-  >>> response = http_call('POST', 'http://localhost/++rest++d/app/alpha')
+  >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++d/app/alpha')
   Traceback (most recent call last):
     ...
-  GrokMethodNotAllowed: <grokcore.rest.ftests.rest.rest.MyContent object at ...
+  grokcore.rest.rest.GrokMethodNotAllowed: \
+  <grokcore.rest.ftests.rest.rest.MyContent object at ...
 
 According to the HTTP spec, in case of a 405 Method Not Allowed error,
 the response MUST include an Allow header containing a list of valid
 methods for the requested resource::
 
-  >>> print http('POST /++rest++b/app HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'POST', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
-  Content-Type: text/plain
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   Method Not Allowed
 
-  >>> print http('DELETE /++rest++b/app HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'DELETE', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   Method Not Allowed
 
-  >>> print http('POST /++rest++c/app HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'POST', '/++rest++c/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
-  Content-Type: text/plain
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   Method Not Allowed
 
 We can also try this with a completely made-up request method, like FROG::
 
-  >>> print http('FROG /++rest++b/app HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'FROG', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   Method Not Allowed
 
 Let's now see whether security works properly with REST. GET should
 be public::
 
-  >>> print http('GET /++rest++e/app/alpha HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'GET', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 200 Ok
   Content-Length: 4
-  Content-Type: text/plain
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   GET3
 
 POST, PUT and DELETE however are not public::
 
-  >>> print http('POST /++rest++e/app/alpha HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'POST', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
-  Content-Type: text/plain
+  Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print http('PUT /++rest++e/app/alpha HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'PUT', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print http('DELETE /++rest++e/app/alpha HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'DELETE', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
@@ -200,43 +215,49 @@ entirely new resource, similar to what is contained in a PUT body. We
 therefore need to have some easy way to get to this information. The 'body'
 attribute on the REST view contains the uploaded data::
 
-  >>> print http_call('POST', 'http://localhost/++rest++f/app/alpha',
-  ...                 'this is the POST body')
+  >>> print(http_call(
+  ...     wsgi_app(), 'POST', 'http://localhost/++rest++f/app/alpha',
+  ...     'this is the POST body'))
   HTTP/1.0 200 Ok
   Content-Length: 21
-  Content-Type: text/plain
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   this is the POST body
 
 This works with PUT as well::
 
-  >>> print http_call('PUT', 'http://localhost/++rest++f/app/alpha',
-  ...                 'this is the PUT body')
+  >>> print(http_call(
+  ...    wsgi_app(), 'PUT', 'http://localhost/++rest++f/app/alpha',
+  ...    'this is the PUT body'))
   HTTP/1.0 200 Ok
   Content-Length: 20
+  Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   this is the PUT body
 
 Opening up the publication for REST doesn't mean we can just delete
 random objects without access:
 
-  >>> print http('DELETE /app HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'DELETE', '/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
+  Content-Type: text/plain;charset=utf-8
   Method Not Allowed
 
-  >>> print http('DELETE /app/alpha HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'DELETE', '/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
+  Content-Type: text/plain;charset=utf-8
   Method Not Allowed
 
  We shouldn't be allowed to PUT either::
 
-  >>> print http('PUT /app/beta HTTP/1.1')
+  >>> print(http_call(wsgi_app(), 'PUT', '/app/beta HTTP/1.1', handle_errors=True))
   HTTP/1.0 404 Not Found
   Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
 
 XXX shouldn't this really give a FORBIDDEN response?
 
@@ -249,38 +270,38 @@ case, but a more specific REST view is declared on the class itself::
 
 We should get a different result for the GET request::
 
-  >>> response = http_call('GET', 'http://localhost/++rest++g/app/one')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++g/app/one')
+  >>> bprint(response.getBody())
   GET interface registered
-  >>> response = http_call('GET', 'http://localhost/++rest++g/app/two')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++g/app/two')
+  >>> bprint(response.getBody())
   GET directly registered
 
 We should also get a different result for the PUT request::
 
-  >>> response = http_call('PUT', 'http://localhost/++rest++g/app/one')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++g/app/one')
+  >>> bprint(response.getBody())
   PUT interface registered
-  >>> response = http_call('PUT', 'http://localhost/++rest++g/app/two')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++g/app/two')
+  >>> bprint(response.getBody())
   PUT directly registered
 
 We expect POST and DELETE to be the same on both. For the directly
 registered object (two) it should fall back to the interface as there
 is none more specifically declared::
 
-  >>> response = http_call('POST', 'http://localhost/++rest++g/app/one')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++g/app/one')
+  >>> bprint(response.getBody())
   POST interface registered
-  >>> response = http_call('POST', 'http://localhost/++rest++g/app/two')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++g/app/two')
+  >>> bprint(response.getBody())
   POST interface registered
 
-  >>> response = http_call('DELETE', 'http://localhost/++rest++g/app/one')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++g/app/one')
+  >>> bprint(response.getBody())
   DELETE interface registered
-  >>> response = http_call('DELETE', 'http://localhost/++rest++g/app/two')
-  >>> print response.getBody()
+  >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++g/app/two')
+  >>> bprint(response.getBody())
   DELETE interface registered
 
 Todo:
@@ -292,7 +313,7 @@ Todo:
 
 import grokcore.component as grok
 from grokcore import rest, view, security, content
-from zope.interface import Interface
+from zope.interface import Interface, implementer
 
 class IFoo(Interface):
     pass
@@ -329,15 +350,19 @@ class ARest(rest.REST):
     grok.context(MyApp)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET"
 
     def POST(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "POST"
 
     def PUT(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "PUT"
 
     def DELETE(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "DELETE"
 
 class BRest(rest.REST):
@@ -345,9 +370,11 @@ class BRest(rest.REST):
     grok.context(MyApp)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET"
 
     def PUT(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "PUT"
 
 class CRest(rest.REST):
@@ -361,6 +388,7 @@ class DRest(rest.REST):
     grok.context(MyContent)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET2"
 
 class SecurityRest(rest.REST):
@@ -369,18 +397,22 @@ class SecurityRest(rest.REST):
 
     @security.require(security.Public)
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET3"
 
     @security.require('zope.ManageContent')
     def POST(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "POST3"
 
     @security.require('zope.ManageContent')
     def PUT(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "PUT3"
 
     @security.require('zope.ManageContent')
     def DELETE(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "DELETE3"
 
 class BodyTest(rest.REST):
@@ -388,31 +420,39 @@ class BodyTest(rest.REST):
     view.layer(LayerContent)
 
     def POST(self):
-        return self.body
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return self.body.decode()
 
     def PUT(self):
-        return self.body
+        self.request.response.setHeader('Content-Type', 'text/plain')
+        return self.body.decode()
 
+@implementer(IFoo)
 class MyInterfaceContent(grok.Context):
-    grok.implements(IFoo)
+    pass
 
+@implementer(IFoo)
 class MyNoInterfaceContent(grok.Context):
-    grok.implements(IFoo)
+    pass
 
 class InterfaceRest(rest.REST):
     grok.context(IFoo)
     view.layer(LayerInterface)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET interface registered"
 
     def POST(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "POST interface registered"
 
     def PUT(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "PUT interface registered"
 
     def DELETE(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "DELETE interface registered"
 
 class NoInterfaceRest(rest.REST):
@@ -420,7 +460,9 @@ class NoInterfaceRest(rest.REST):
     view.layer(LayerInterface)
 
     def GET(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "GET directly registered"
 
     def PUT(self):
+        self.request.response.setHeader('Content-Type', 'text/plain')
         return "PUT directly registered"

@@ -1,7 +1,11 @@
-*.pyc
-.installed.cfg
-__pycache__
-bin
-develop-eggs
-parts
 src/*.egg-info
+parts
+develop-eggs
+dev
+bin
+*.pyc
+.tox
+.mr.developer.cfg
+.installed.cfg
+.coverage
+__pycache__

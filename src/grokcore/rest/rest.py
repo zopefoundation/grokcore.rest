@@ -14,7 +14,7 @@ from zope import component
 from zope.component.interfaces import ComponentLookupError
 from zope.traversing.interfaces import TraversalError
 from zope.traversing.namespace import view
-from zope.interface import Interface
+from zope.interface import Interface, implementer
 from zope.publisher.interfaces.http import IHTTPRequest, MethodNotAllowed
 from zope.publisher.browser import applySkin
 
@@ -23,6 +23,7 @@ class GrokMethodNotAllowed(MethodNotAllowed):
     """Exception indicating that an attempted REST method is not allowed."""
 
 
+@implementer(Interface)
 class MethodNotAllowedView(grok.MultiAdapter):
     """View rendering a REST GrokMethodNotAllowed exception over HTTP.
 
@@ -37,7 +38,6 @@ class MethodNotAllowedView(grok.MultiAdapter):
     """
     grok.adapts(GrokMethodNotAllowed, IHTTPRequest)
     grok.name('index.html')
-    grok.implements(Interface)
 
     def __init__(self, error, request):
         self.error = error
@@ -60,6 +60,7 @@ class MethodNotAllowedView(grok.MultiAdapter):
 
     def __call__(self):
         self.request.response.setHeader('Allow', ', '.join(self.allow))
+        self.request.response.setHeader('Content-Type', 'text/plain')
         self.request.response.setStatus(405)
         return 'Method Not Allowed'
 

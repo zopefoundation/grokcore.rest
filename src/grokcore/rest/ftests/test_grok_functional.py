@@ -1,19 +1,33 @@
-import re
-import unittest, doctest
+import doctest
 import grokcore.rest
+import grokcore.rest.testing
+import re
+import six
+import unittest
+import zope.app.wsgi.testlayer
+import zope.testbrowser.wsgi
 
 from pkg_resources import resource_listdir
+from zope.app.wsgi.testlayer import http
 from zope.testing import renormalizing
-from zope.app.wsgi.testlayer import BrowserLayer, http
 
-FunctionalLayer = BrowserLayer(grokcore.rest)
+
+class Layer(
+        zope.testbrowser.wsgi.TestBrowserLayer,
+        zope.app.wsgi.testlayer.BrowserLayer):
+    pass
+
+
+layer = Layer(grokcore.rest, allowTearDown=True)
+
 
 checker = renormalizing.RENormalizing([
     # Accommodate to exception wrapping in newer versions of mechanize
     (re.compile(r'httperror_seek_wrapper:', re.M), 'HTTPError:'),
     ])
 
-def http_call(method, path, data=None, **kw):
+
+def http_call(app, method, path, data=None, handle_errors=False, **kw):
     """Function to help make RESTful calls.
 
     method - HTTP method to use
@@ -21,17 +35,22 @@ def http_call(method, path, data=None, **kw):
     data - (body) data to submit
     kw - any request parameters
     """
-
     if path.startswith('http://localhost'):
         path = path[len('http://localhost'):]
-    request_string = '%s %s HTTP/1.1\n' % (method, path)
+    request_string = '{} {} HTTP/1.1\n'.format(method, path)
     for key, value in kw.items():
-        request_string += '%s: %s\n' % (key, value)
+        request_string += '{}: {}\n'.format(key, value)
     if data is not None:
-        request_string += 'Content-Length:%s\n' % len(data)
+        request_string += 'Content-Length:{}\n'.format(len(data))
         request_string += '\r\n'
         request_string += data
-    return http(request_string, handle_errors=False)
+
+    if six.PY3:
+        request_string = request_string.encode()
+
+    result = http(app, request_string, handle_errors=handle_errors)
+    return result
+
 
 def suiteFromPackage(name):
     files = resource_listdir(__name__, name)
@@ -46,16 +65,22 @@ def suiteFromPackage(name):
         test = doctest.DocTestSuite(
             dottedname,
             checker=checker,
-            extraglobs=dict(http_call=http_call,
-                            http=http,
-                            getRootFolder=FunctionalLayer.getRootFolder),
-            optionflags=(doctest.ELLIPSIS+
-                         doctest.NORMALIZE_WHITESPACE+
-                         doctest.REPORT_NDIFF))
-        test.layer = FunctionalLayer
+            extraglobs=dict(
+                bprint=grokcore.rest.testing.bprint,
+                getRootFolder=layer.getRootFolder,
+                http_call=http_call,
+                http=http,
+                wsgi_app=layer.make_wsgi_app),
+            optionflags=(
+                doctest.ELLIPSIS +
+                doctest.NORMALIZE_WHITESPACE +
+                doctest.REPORT_NDIFF +
+                renormalizing.IGNORE_EXCEPTION_MODULE_IN_PYTHON2))
+        test.layer = layer
 
         suite.addTest(test)
     return suite
+
 
 def test_suite():
     suite = unittest.TestSuite()

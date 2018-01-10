@@ -15,29 +15,28 @@
 """
 from zope import interface
 from zope.interface.interfaces import IInterface
-from zope.publisher.interfaces.http import IHTTPRequest
 
 
 # Expose interfaces from grokcore.* packages as well:
 import grokcore.component.interfaces
+import grokcore.traverser.interfaces
 import grokcore.security.interfaces
 import grokcore.view.interfaces
 
 
 class IBaseClasses(
-    grokcore.component.interfaces.IBaseClasses,
-    grokcore.view.interfaces.IBaseClasses,
-    grokcore.security.interfaces.IBaseClasses
-    ):
+        grokcore.component.interfaces.IBaseClasses,
+        grokcore.view.interfaces.IBaseClasses,
+        grokcore.security.interfaces.IBaseClasses):
+
     REST = interface.Attribute("Base class for REST views.")
 
 
 class IGrokcoreRestAPI(
-    grokcore.component.interfaces.IGrokcoreComponentAPI,
-    grokcore.security.interfaces.IGrokcoreSecurityAPI,
-    grokcore.view.interfaces.IGrokcoreViewAPI,
-    IBaseClasses
-    ):
+        grokcore.component.interfaces.IGrokcoreComponentAPI,
+        grokcore.security.interfaces.IGrokcoreSecurityAPI,
+        grokcore.view.interfaces.IGrokcoreViewAPI,
+        IBaseClasses):
 
     IRESTSkinType = interface.Attribute('The REST skin type')
 
@@ -58,7 +57,7 @@ class IREST(interface.Interface):
         "Request that REST handler was looked up with.")
 
 
-class IRESTLayer(IHTTPRequest):
+class IRESTLayer(grokcore.traverser.interfaces.IRESTLayer):
     """REST-specific Request functionality.
 
     Base Interfaces for defining REST-layers.
