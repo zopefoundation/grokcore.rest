@@ -7,13 +7,10 @@ python:
     - pypy
     - pypy3
 install:
-    - pip install -U pip setuptools
-    - pip install -U zope.testrunner coverage coveralls
-    - pip install -U -e .[test]
+    - pip install -U -r requirements.txt
+    - buildout
 script:
-    - coverage run -m zope.testrunner --test-path=src
-after_success:
-    - coveralls
+    - bin/test
 notifications:
     email: false
 cache: pip
