@@ -23,7 +23,7 @@ tests_require = [
     'six',
     'zope.app.appsetup',
     'zope.app.wsgi[test]',
-    'zope.errorview',
+    'zope.errorview >= 1.2.0',
     'zope.testbrowser',
     'zope.testing',
     ]
