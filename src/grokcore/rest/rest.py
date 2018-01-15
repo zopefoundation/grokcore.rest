@@ -60,9 +60,11 @@ class MethodNotAllowedView(grok.MultiAdapter):
 
     def __call__(self):
         self.request.response.setHeader('Allow', ', '.join(self.allow))
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         self.request.response.setStatus(405)
         return 'Method Not Allowed'
+
 
 class rest_skin(view):
     """A rest skin.

@@ -53,7 +53,8 @@ def http_call(app, method, path, data=None, handle_errors=False, **kw):
 
 
 def suiteFromPackage(name):
-    files = resource_listdir(__name__, name)
+    layer_dir = 'functional'
+    files = resource_listdir(__name__, '{}/{}'.format(layer_dir, name))
     suite = unittest.TestSuite()
     for filename in files:
         if not filename.endswith('.py'):
@@ -61,7 +62,8 @@ def suiteFromPackage(name):
         if filename == '__init__.py':
             continue
 
-        dottedname = 'grokcore.rest.ftests.%s.%s' % (name, filename[:-3])
+        dottedname = 'grokcore.rest.tests.%s.%s.%s' % (
+            layer_dir, name, filename[:-3])
         test = doctest.DocTestSuite(
             dottedname,
             checker=checker,

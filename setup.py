@@ -22,8 +22,9 @@ tests_require = [
     'grokcore.view[test]',
     'six',
     'zope.app.appsetup',
-    'zope.app.wsgi',
-    'zope.errorview',
+    'zope.app.wsgi[test]',
+    'zope.errorview >= 1.2.0',
+    'zope.testbrowser',
     'zope.testing',
     ]
 

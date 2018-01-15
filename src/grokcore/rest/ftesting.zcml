@@ -13,6 +13,6 @@
 
    <include package="grokcore.rest" />
 
-   <grok:grok package=".ftests" />
+   <grok:grok package=".tests.functional" />
 
 </configure>
