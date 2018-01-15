@@ -140,7 +140,7 @@ According to the HTTP spec, in case of a 405 Method Not Allowed error,
 the response MUST include an Allow header containing a list of valid
 methods for the requested resource::
 
-  >>> print(http_call(wsgi_app(), 'POST', '/++rest++b/app HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
@@ -148,7 +148,7 @@ methods for the requested resource::
   <BLANKLINE>
   Method Not Allowed
 
-  >>> print(http_call(wsgi_app(), 'DELETE', '/++rest++b/app HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'DELETE', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
@@ -156,7 +156,7 @@ methods for the requested resource::
   <BLANKLINE>
   Method Not Allowed
 
-  >>> print(http_call(wsgi_app(), 'POST', '/++rest++c/app HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++c/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
@@ -166,7 +166,7 @@ methods for the requested resource::
 
 We can also try this with a completely made-up request method, like FROG::
 
-  >>> print(http_call(wsgi_app(), 'FROG', '/++rest++b/app HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'FROG', '/++rest++b/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
@@ -177,7 +177,7 @@ We can also try this with a completely made-up request method, like FROG::
 Let's now see whether security works properly with REST. GET should
 be public::
 
-  >>> print(http_call(wsgi_app(), 'GET', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'GET', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 200 Ok
   Content-Length: 4
   Content-Type: text/plain;charset=utf-8
@@ -186,21 +186,21 @@ be public::
 
 POST, PUT and DELETE however are not public::
 
-  >>> print(http_call(wsgi_app(), 'POST', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print(http_call(wsgi_app(), 'PUT', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'PUT', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print(http_call(wsgi_app(), 'DELETE', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'DELETE', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
@@ -215,7 +215,7 @@ entirely new resource, similar to what is contained in a PUT body. We
 therefore need to have some easy way to get to this information. The 'body'
 attribute on the REST view contains the uploaded data::
 
-  >>> print(http_call(
+  >>> print(str_http_call(
   ...     wsgi_app(), 'POST', 'http://localhost/++rest++f/app/alpha',
   ...     'this is the POST body'))
   HTTP/1.0 200 Ok
@@ -226,7 +226,7 @@ attribute on the REST view contains the uploaded data::
 
 This works with PUT as well::
 
-  >>> print(http_call(
+  >>> print(str_http_call(
   ...    wsgi_app(), 'PUT', 'http://localhost/++rest++f/app/alpha',
   ...    'this is the PUT body'))
   HTTP/1.0 200 Ok
@@ -238,14 +238,14 @@ This works with PUT as well::
 Opening up the publication for REST doesn't mean we can just delete
 random objects without access:
 
-  >>> print(http_call(wsgi_app(), 'DELETE', '/app HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'DELETE', '/app HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
   Content-Type: text/plain;charset=utf-8
   Method Not Allowed
 
-  >>> print(http_call(wsgi_app(), 'DELETE', '/app/alpha HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'DELETE', '/app/alpha HTTP/1.1', handle_errors=True))
   HTTP/1.0 405 Method Not Allowed
   Allow:
   Content-Length: 18
@@ -254,7 +254,7 @@ random objects without access:
 
  We shouldn't be allowed to PUT either::
 
-  >>> print(http_call(wsgi_app(), 'PUT', '/app/beta HTTP/1.1', handle_errors=True))
+  >>> print(str_http_call(wsgi_app(), 'PUT', '/app/beta HTTP/1.1', handle_errors=True))
   HTTP/1.0 404 Not Found
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8

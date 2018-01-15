@@ -52,6 +52,12 @@ def http_call(app, method, path, data=None, handle_errors=False, **kw):
     return result
 
 
+def str_http_call(*args, **kw):
+    result = http_call(*args, **kw)
+    # annoying 2.7 regression even though zope.errorview was fixed
+    return str(result).replace('plain; charset', 'plain;charset')
+
+
 def suiteFromPackage(name):
     layer_dir = 'functional'
     files = resource_listdir(__name__, '{}/{}'.format(layer_dir, name))
@@ -71,6 +77,7 @@ def suiteFromPackage(name):
                 bprint=grokcore.rest.testing.bprint,
                 getRootFolder=layer.getRootFolder,
                 http_call=http_call,
+                str_http_call=str_http_call,
                 http=http,
                 wsgi_app=layer.make_wsgi_app),
             optionflags=(
