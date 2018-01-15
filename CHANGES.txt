@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.0.1 (unreleased)
+3.0.1 (2018-01-15)
 ==================
 
 - Additional test fixes for Python 3 compatibility.
