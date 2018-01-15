@@ -63,7 +63,7 @@ allowed) error::
   Traceback (most recent call last):
     ...
   grokcore.rest.rest.GrokMethodNotAllowed: \
-  <grokcore.rest.tests.functional.rest.rest.MyApp object at ...>,
+  <grokcore.rest.tests.functional.rest.rest.MyApp object at ...>, \
   <zope.publisher.browser.BrowserRequest instance URL=http://localhost/++rest++b/app>
 
 DELETE is also not defined, so we also expect a 405 error::
@@ -72,7 +72,7 @@ DELETE is also not defined, so we also expect a 405 error::
   Traceback (most recent call last):
     ...
   grokcore.rest.rest.GrokMethodNotAllowed: \
-  <grokcore.rest.tests.functional.rest.rest.MyApp object at ...>,
+  <grokcore.rest.tests.functional.rest.rest.MyApp object at ...>, \
   <zope.publisher.http.HTTPRequest instance URL=http://localhost/++rest++b/app>
 
 Let's examine protocol c where no method is allowed::
@@ -350,19 +350,23 @@ class ARest(rest.REST):
     grok.context(MyApp)
 
     def GET(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "GET"
 
     def POST(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "POST"
 
     def PUT(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "PUT"
 
     def DELETE(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE"
 
 class BRest(rest.REST):
@@ -370,11 +374,13 @@ class BRest(rest.REST):
     grok.context(MyApp)
 
     def GET(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "GET"
 
     def PUT(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "PUT"
 
 class CRest(rest.REST):
@@ -388,7 +394,8 @@ class DRest(rest.REST):
     grok.context(MyContent)
 
     def GET(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "GET2"
 
 class SecurityRest(rest.REST):
@@ -397,22 +404,26 @@ class SecurityRest(rest.REST):
 
     @security.require(security.Public)
     def GET(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "GET3"
 
     @security.require('zope.ManageContent')
     def POST(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "POST3"
 
     @security.require('zope.ManageContent')
     def PUT(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "PUT3"
 
     @security.require('zope.ManageContent')
     def DELETE(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE3"
 
 class BodyTest(rest.REST):
@@ -420,11 +431,13 @@ class BodyTest(rest.REST):
     view.layer(LayerContent)
 
     def POST(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return self.body.decode()
 
     def PUT(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return self.body.decode()
 
 @implementer(IFoo)
@@ -440,19 +453,23 @@ class InterfaceRest(rest.REST):
     view.layer(LayerInterface)
 
     def GET(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "GET interface registered"
 
     def POST(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "POST interface registered"
 
     def PUT(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "PUT interface registered"
 
     def DELETE(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE interface registered"
 
 class NoInterfaceRest(rest.REST):
@@ -460,9 +477,11 @@ class NoInterfaceRest(rest.REST):
     view.layer(LayerInterface)
 
     def GET(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "GET directly registered"
 
     def PUT(self):
-        self.request.response.setHeader('Content-Type', 'text/plain')
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return "PUT directly registered"

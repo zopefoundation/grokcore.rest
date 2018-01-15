@@ -66,4 +66,6 @@ class MammothRest(rest.REST):
 
     @security.require(TouchMammoth)
     def GET(self):
+        self.request.response.setHeader(
+            'Content-Type', 'text/plain;charset=utf-8')
         return self.context.name
