@@ -26,8 +26,8 @@ import grokcore.view.interfaces
 
 class IBaseClasses(
         grokcore.component.interfaces.IBaseClasses,
-        grokcore.view.interfaces.IBaseClasses,
-        grokcore.security.interfaces.IBaseClasses):
+        grokcore.security.interfaces.IBaseClasses,
+        grokcore.view.interfaces.IBaseClasses):
 
     REST = interface.Attribute("Base class for REST views.")
 
