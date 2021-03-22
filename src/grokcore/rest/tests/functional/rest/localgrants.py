@@ -26,7 +26,7 @@ access the view just fine:
 With the grant in place we can access it as anonymous:
 
   >>> print(http(wsgi_app(), b'GET /++rest++mammoth/manfred HTTP/1.1'))
-  HTTP/1.0 200 Ok
+  HTTP/1.1 200 Ok
   Content-Length: 7
   Content-Type: text/plain;charset=utf-8
   <BLANKLINE>

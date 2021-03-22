@@ -5,7 +5,8 @@ Changes
 3.0.2 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Fix compatibility with ``zope.component >= 5`` and newer versions of other
+  dependencies.
 
 
 3.0.1 (2018-01-15)

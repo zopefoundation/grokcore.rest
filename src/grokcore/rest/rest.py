@@ -11,7 +11,7 @@ import grokcore.view
 from grokcore.rest.interfaces import IRESTSkinType
 
 from zope import component
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 from zope.traversing.interfaces import TraversalError
 from zope.traversing.namespace import view
 from zope.interface import Interface, implementer
