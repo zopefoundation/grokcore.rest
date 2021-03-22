@@ -73,6 +73,7 @@ class rest_skin(view):
     backed out.  We need it for our REST support.
 
     """
+
     def traverse(self, name, ignored):
         self.request.shiftNameToApplication()
         try:

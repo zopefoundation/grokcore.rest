@@ -22,7 +22,7 @@ of a Grok-based web application.
 
 """
 from martian.error import GrokError
-from zope import interface, component
+from zope import interface
 from grokcore.view import make_checker
 from zope.interface.interface import InterfaceClass
 
@@ -69,12 +69,12 @@ class RESTGrokker(martian.MethodGrokker):
             discriminator=('adapter', adapts, interface.Interface, name),
             callable=grokcore.component.provideAdapter,
             args=(method_view, adapts, interface.Interface, name),
-            )
+        )
         config.action(
             discriminator=('protectName', method_view, '__call__'),
             callable=make_checker,
             args=(factory, method_view, permission),
-            )
+        )
         return True
 
 

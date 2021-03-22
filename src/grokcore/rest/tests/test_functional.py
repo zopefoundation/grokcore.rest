@@ -37,7 +37,7 @@ def http_call(app, method, path, data=None, handle_errors=False, **kw):
         request_string += '\r\n'
         request_string += data
 
-    if six.PY3:
+    if six.PY3:  # pragma: PY3
         request_string = request_string.encode()
 
     result = http(app, request_string, handle_errors=handle_errors)
@@ -87,6 +87,3 @@ def test_suite():
     for name in ['rest']:
         suite.addTest(suiteFromPackage(name))
     return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')

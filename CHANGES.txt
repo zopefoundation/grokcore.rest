@@ -2,12 +2,15 @@
 Changes
 =======
 
-3.0.2 (unreleased)
+3.1.0 (unreleased)
 ==================
+
+- Add support for Python 3.7, 3.9 and 3.9.
 
 - Fix compatibility with ``zope.component >= 5`` and newer versions of other
   dependencies.
 
+- Drop support for Python 3.4.
 
 3.0.1 (2018-01-15)
 ==================

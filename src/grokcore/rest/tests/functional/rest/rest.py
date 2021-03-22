@@ -309,41 +309,52 @@ Todo:
 * Support for OPTIONS, HEAD, other methods?
 
 * Content-Type header is there for GET/POST, but not for PUT/DELETE...
-"""
+"""  # noqa: E501 line too long
 
 import grokcore.component as grok
 from grokcore import rest, view, security, content
 from zope.interface import Interface, implementer
 
+
 class IFoo(Interface):
     pass
+
 
 class MyApp(content.Container):
     pass
 
+
 class MyContent(grok.Context):
     pass
+
 
 class LayerA(rest.IRESTLayer):
     rest.restskin('a')
 
+
 class LayerB(rest.IRESTLayer):
     rest.restskin('b')
+
 
 class LayerC(rest.IRESTLayer):
     rest.restskin('c')
 
+
 class LayerSecurity(rest.IRESTLayer):
     rest.restskin('e')
+
 
 class LayerContent(rest.IRESTLayer):
     rest.restskin('f')
 
+
 class LayerInterface(rest.IRESTLayer):
     rest.restskin('g')
 
+
 class D(rest.IRESTLayer):
     rest.restskin('d')
+
 
 class ARest(rest.REST):
     view.layer(LayerA)
@@ -369,6 +380,7 @@ class ARest(rest.REST):
             'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE"
 
+
 class BRest(rest.REST):
     view.layer(LayerB)
     grok.context(MyApp)
@@ -383,12 +395,14 @@ class BRest(rest.REST):
             'Content-Type', 'text/plain;charset=utf-8')
         return "PUT"
 
+
 class CRest(rest.REST):
     view.layer(LayerC)
     grok.context(MyApp)
 
     def some_method_thats_not_in_HTTP(self):
         pass
+
 
 class DRest(rest.REST):
     grok.context(MyContent)
@@ -397,6 +411,7 @@ class DRest(rest.REST):
         self.request.response.setHeader(
             'Content-Type', 'text/plain;charset=utf-8')
         return "GET2"
+
 
 class SecurityRest(rest.REST):
     grok.context(MyContent)
@@ -426,6 +441,7 @@ class SecurityRest(rest.REST):
             'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE3"
 
+
 class BodyTest(rest.REST):
     grok.context(MyContent)
     view.layer(LayerContent)
@@ -440,13 +456,16 @@ class BodyTest(rest.REST):
             'Content-Type', 'text/plain;charset=utf-8')
         return self.body.decode()
 
+
 @implementer(IFoo)
 class MyInterfaceContent(grok.Context):
     pass
 
+
 @implementer(IFoo)
 class MyNoInterfaceContent(grok.Context):
     pass
+
 
 class InterfaceRest(rest.REST):
     grok.context(IFoo)
@@ -471,6 +490,7 @@ class InterfaceRest(rest.REST):
         self.request.response.setHeader(
             'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE interface registered"
+
 
 class NoInterfaceRest(rest.REST):
     grok.context(MyNoInterfaceContent)
