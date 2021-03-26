@@ -26,7 +26,7 @@ access the view just fine:
 With the grant in place we can access it as anonymous:
 
   >>> print(http(wsgi_app(), b'GET /++rest++mammoth/manfred HTTP/1.1'))
-  HTTP/1.0 200 Ok
+  HTTP/1.1 200 Ok
   Content-Length: 7
   Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
@@ -50,16 +50,20 @@ ILocation and has the appropriate parent pointer:
 import grokcore.component as grok
 from grokcore import view, content, rest, security
 
+
 class Mammoth(content.Model):
 
     def __init__(self, name):
         self.name = name
 
+
 class MammothRestLayer(rest.IRESTLayer):
     rest.restskin('mammoth')
 
+
 class TouchMammoth(security.Permission):
     grok.name('mammoth.Touch')
+
 
 class MammothRest(rest.REST):
     view.layer(MammothRestLayer)

@@ -140,24 +140,24 @@ According to the HTTP spec, in case of a 405 Method Not Allowed error,
 the response MUST include an Allow header containing a list of valid
 methods for the requested resource::
 
-  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++b/app HTTP/1.1', handle_errors=True))
-  HTTP/1.0 405 Method Not Allowed
+  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++b/app', handle_errors=True))
+  HTTP/1.1 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
   Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   Method Not Allowed
 
-  >>> print(str_http_call(wsgi_app(), 'DELETE', '/++rest++b/app HTTP/1.1', handle_errors=True))
-  HTTP/1.0 405 Method Not Allowed
+  >>> print(str_http_call(wsgi_app(), 'DELETE', '/++rest++b/app', handle_errors=True))
+  HTTP/1.1 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
   Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
   Method Not Allowed
 
-  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++c/app HTTP/1.1', handle_errors=True))
-  HTTP/1.0 405 Method Not Allowed
+  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++c/app', handle_errors=True))
+  HTTP/1.1 405 Method Not Allowed
   Allow:
   Content-Length: 18
   Content-Type: text/plain;charset=utf-8
@@ -166,8 +166,8 @@ methods for the requested resource::
 
 We can also try this with a completely made-up request method, like FROG::
 
-  >>> print(str_http_call(wsgi_app(), 'FROG', '/++rest++b/app HTTP/1.1', handle_errors=True))
-  HTTP/1.0 405 Method Not Allowed
+  >>> print(str_http_call(wsgi_app(), 'FROG', '/++rest++b/app', handle_errors=True))
+  HTTP/1.1 405 Method Not Allowed
   Allow: GET, PUT
   Content-Length: 18
   Content-Type: text/plain;charset=utf-8
@@ -177,8 +177,8 @@ We can also try this with a completely made-up request method, like FROG::
 Let's now see whether security works properly with REST. GET should
 be public::
 
-  >>> print(str_http_call(wsgi_app(), 'GET', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
-  HTTP/1.0 200 Ok
+  >>> print(str_http_call(wsgi_app(), 'GET', '/++rest++e/app/alpha', handle_errors=True))
+  HTTP/1.1 200 Ok
   Content-Length: 4
   Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
@@ -186,22 +186,22 @@ be public::
 
 POST, PUT and DELETE however are not public::
 
-  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
-  HTTP/1.0 401 Unauthorized
+  >>> print(str_http_call(wsgi_app(), 'POST', '/++rest++e/app/alpha', handle_errors=True))
+  HTTP/1.1 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print(str_http_call(wsgi_app(), 'PUT', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
-  HTTP/1.0 401 Unauthorized
+  >>> print(str_http_call(wsgi_app(), 'PUT', '/++rest++e/app/alpha', handle_errors=True))
+  HTTP/1.1 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
 
-  >>> print(str_http_call(wsgi_app(), 'DELETE', '/++rest++e/app/alpha HTTP/1.1', handle_errors=True))
-  HTTP/1.0 401 Unauthorized
+  >>> print(str_http_call(wsgi_app(), 'DELETE', '/++rest++e/app/alpha', handle_errors=True))
+  HTTP/1.1 401 Unauthorized
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
   WWW-Authenticate: basic realm="Zope"
@@ -218,7 +218,7 @@ attribute on the REST view contains the uploaded data::
   >>> print(str_http_call(
   ...     wsgi_app(), 'POST', 'http://localhost/++rest++f/app/alpha',
   ...     'this is the POST body'))
-  HTTP/1.0 200 Ok
+  HTTP/1.1 200 Ok
   Content-Length: 21
   Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
@@ -229,7 +229,7 @@ This works with PUT as well::
   >>> print(str_http_call(
   ...    wsgi_app(), 'PUT', 'http://localhost/++rest++f/app/alpha',
   ...    'this is the PUT body'))
-  HTTP/1.0 200 Ok
+  HTTP/1.1 200 Ok
   Content-Length: 20
   Content-Type: text/plain;charset=utf-8
   <BLANKLINE>
@@ -238,15 +238,15 @@ This works with PUT as well::
 Opening up the publication for REST doesn't mean we can just delete
 random objects without access:
 
-  >>> print(str_http_call(wsgi_app(), 'DELETE', '/app HTTP/1.1', handle_errors=True))
-  HTTP/1.0 405 Method Not Allowed
+  >>> print(str_http_call(wsgi_app(), 'DELETE', '/app', handle_errors=True))
+  HTTP/1.1 405 Method Not Allowed
   Allow:
   Content-Length: 18
   Content-Type: text/plain;charset=utf-8
   Method Not Allowed
 
-  >>> print(str_http_call(wsgi_app(), 'DELETE', '/app/alpha HTTP/1.1', handle_errors=True))
-  HTTP/1.0 405 Method Not Allowed
+  >>> print(str_http_call(wsgi_app(), 'DELETE', '/app/alpha', handle_errors=True))
+  HTTP/1.1 405 Method Not Allowed
   Allow:
   Content-Length: 18
   Content-Type: text/plain;charset=utf-8
@@ -254,8 +254,8 @@ random objects without access:
 
  We shouldn't be allowed to PUT either::
 
-  >>> print(str_http_call(wsgi_app(), 'PUT', '/app/beta HTTP/1.1', handle_errors=True))
-  HTTP/1.0 404 Not Found
+  >>> print(str_http_call(wsgi_app(), 'PUT', '/app/beta', handle_errors=True))
+  HTTP/1.1 404 Not Found
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
 
@@ -309,41 +309,52 @@ Todo:
 * Support for OPTIONS, HEAD, other methods?
 
 * Content-Type header is there for GET/POST, but not for PUT/DELETE...
-"""
+"""  # noqa: E501 line too long
 
 import grokcore.component as grok
 from grokcore import rest, view, security, content
 from zope.interface import Interface, implementer
 
+
 class IFoo(Interface):
     pass
+
 
 class MyApp(content.Container):
     pass
 
+
 class MyContent(grok.Context):
     pass
+
 
 class LayerA(rest.IRESTLayer):
     rest.restskin('a')
 
+
 class LayerB(rest.IRESTLayer):
     rest.restskin('b')
+
 
 class LayerC(rest.IRESTLayer):
     rest.restskin('c')
 
+
 class LayerSecurity(rest.IRESTLayer):
     rest.restskin('e')
+
 
 class LayerContent(rest.IRESTLayer):
     rest.restskin('f')
 
+
 class LayerInterface(rest.IRESTLayer):
     rest.restskin('g')
 
+
 class D(rest.IRESTLayer):
     rest.restskin('d')
+
 
 class ARest(rest.REST):
     view.layer(LayerA)
@@ -369,6 +380,7 @@ class ARest(rest.REST):
             'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE"
 
+
 class BRest(rest.REST):
     view.layer(LayerB)
     grok.context(MyApp)
@@ -383,12 +395,14 @@ class BRest(rest.REST):
             'Content-Type', 'text/plain;charset=utf-8')
         return "PUT"
 
+
 class CRest(rest.REST):
     view.layer(LayerC)
     grok.context(MyApp)
 
     def some_method_thats_not_in_HTTP(self):
         pass
+
 
 class DRest(rest.REST):
     grok.context(MyContent)
@@ -397,6 +411,7 @@ class DRest(rest.REST):
         self.request.response.setHeader(
             'Content-Type', 'text/plain;charset=utf-8')
         return "GET2"
+
 
 class SecurityRest(rest.REST):
     grok.context(MyContent)
@@ -426,6 +441,7 @@ class SecurityRest(rest.REST):
             'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE3"
 
+
 class BodyTest(rest.REST):
     grok.context(MyContent)
     view.layer(LayerContent)
@@ -440,13 +456,16 @@ class BodyTest(rest.REST):
             'Content-Type', 'text/plain;charset=utf-8')
         return self.body.decode()
 
+
 @implementer(IFoo)
 class MyInterfaceContent(grok.Context):
     pass
 
+
 @implementer(IFoo)
 class MyNoInterfaceContent(grok.Context):
     pass
+
 
 class InterfaceRest(rest.REST):
     grok.context(IFoo)
@@ -471,6 +490,7 @@ class InterfaceRest(rest.REST):
         self.request.response.setHeader(
             'Content-Type', 'text/plain;charset=utf-8')
         return "DELETE interface registered"
+
 
 class NoInterfaceRest(rest.REST):
     grok.context(MyNoInterfaceContent)

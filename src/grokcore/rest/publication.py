@@ -50,11 +50,12 @@ class GrokHTTPPublication(ZopePublicationSansProxy, HTTPPublication):
     render it.
 
     """
+
     def callObject(self, request, ob):
         orig = ob
         if not IHTTPException.providedBy(ob):
             ob = component.queryMultiAdapter((ob, request),
-                                            name=request.method)
+                                             name=request.method)
             checker = selectChecker(ob)
             if checker is not None:
                 checker.check(ob, '__call__')
@@ -74,6 +75,7 @@ class GrokHTTPFactory(HTTPFactory):
     - The publication class that Grok uses to publish to HTTP.
 
     """
+
     def __call__(self):
         request, publication = super(GrokHTTPFactory, self).__call__()
         return request, GrokHTTPPublication
