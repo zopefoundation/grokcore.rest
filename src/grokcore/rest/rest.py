@@ -11,19 +11,20 @@ import grokcore.view
 from grokcore.rest.interfaces import IRESTSkinType
 
 from zope import component
+from zope.browser.interfaces import IView
+from zope.interface import Interface, implementer
 from zope.interface.interfaces import ComponentLookupError
+from zope.publisher.browser import applySkin
+from zope.publisher.interfaces.http import IHTTPRequest, MethodNotAllowed
 from zope.traversing.interfaces import TraversalError
 from zope.traversing.namespace import view
-from zope.interface import Interface, implementer
-from zope.publisher.interfaces.http import IHTTPRequest, MethodNotAllowed
-from zope.publisher.browser import applySkin
 
 
 class GrokMethodNotAllowed(MethodNotAllowed):
     """Exception indicating that an attempted REST method is not allowed."""
 
 
-@implementer(Interface)
+@implementer(IView)
 class MethodNotAllowedView(grok.MultiAdapter):
     """View rendering a REST GrokMethodNotAllowed exception over HTTP.
 
@@ -39,8 +40,8 @@ class MethodNotAllowedView(grok.MultiAdapter):
     grok.adapts(GrokMethodNotAllowed, IHTTPRequest)
     grok.name('index.html')
 
-    def __init__(self, error, request):
-        self.error = error
+    def __init__(self, context, request):
+        self.context = context
         self.request = request
         self.allow = self._getAllow()
 
@@ -50,7 +51,7 @@ class MethodNotAllowedView(grok.MultiAdapter):
         # the "Allow:" header.
         for method in 'DELETE', 'GET', 'POST', 'PUT':
             view = component.queryMultiAdapter(
-                (self.error.object, self.error.request),
+                (self.context.object, self.context.request),
                 name=method)
             if view is not None:
                 is_not_allowed = getattr(view, 'is_not_allowed', False)
