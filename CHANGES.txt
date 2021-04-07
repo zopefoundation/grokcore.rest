@@ -10,6 +10,8 @@ Changes
 - Fix compatibility with ``zope.component >= 5`` and newer versions of other
   dependencies.
 
+- Fix inconsistent IRO.
+
 - Drop support for Python 3.4.
 
 3.0.1 (2018-01-15)
