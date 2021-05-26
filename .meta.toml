@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/pure-python
 [meta]
 template = "pure-python"
-commit-id = "ff37be82c6e4d7c4f0f96f4937f2d14d1aadae67"
+commit-id = "a42b1792f61e841423b04385d644c7e2d4581c1c"
 
 [python]
 with-appveyor = false
@@ -28,4 +28,9 @@ additional-config = [
     "per-file-ignores =",
     "    src/grokcore/rest/__init__.py: F401 F403",
     "    src/grokcore/rest/tests/__init__.py: F401 F403",
+    ]
+
+[manifest]
+additional-rules = [
+    "recursive-include src *.zcml",
     ]
