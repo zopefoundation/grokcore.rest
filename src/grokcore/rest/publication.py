@@ -75,5 +75,5 @@ class GrokHTTPFactory(HTTPFactory):
     """
 
     def __call__(self):
-        request, publication = super(GrokHTTPFactory, self).__call__()
+        request, publication = super().__call__()
         return request, GrokHTTPPublication
