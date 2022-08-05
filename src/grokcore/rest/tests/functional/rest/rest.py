@@ -21,40 +21,40 @@ Let's create a simple application with REST support::
 Issue a GET request::
 
   >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++a/app')
-  >>> bprint(response.getBody())
-  GET
+  >>> print(response.getBody())
+  b'GET'
 
 Issue a POST request::
 
   >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++a/app')
-  >>> bprint(response.getBody())
-  POST
+  >>> print(response.getBody())
+  b'POST'
 
 Issue a PUT request::
 
   >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++a/app')
-  >>> bprint(response.getBody())
-  PUT
+  >>> print(response.getBody())
+  b'PUT'
 
 Issue a DELETE request::
 
   >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++a/app')
-  >>> bprint(response.getBody())
-  DELETE
+  >>> print(response.getBody())
+  b'DELETE'
 
 Let's examine a rest protocol b which has no POST or DELETE request defined::
 
 The GET request works as expected::
 
   >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++b/app')
-  >>> bprint(response.getBody())
-  GET
+  >>> print(response.getBody())
+  b'GET'
 
 So does the PUT request::
 
   >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++b/app')
-  >>> bprint(response.getBody())
-  PUT
+  >>> print(response.getBody())
+  b'PUT'
 
 POST is not defined, however, and we should get a 405 (Method not
 allowed) error::
@@ -125,8 +125,8 @@ We have added support for GET for the ``alpha`` subobject only, in
 the default rest layer::
 
   >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++d/app/alpha')
-  >>> bprint(response.getBody())
-  GET2
+  >>> print(response.getBody())
+  b'GET2'
 
 But not for POST::
 
@@ -271,38 +271,38 @@ case, but a more specific REST view is declared on the class itself::
 We should get a different result for the GET request::
 
   >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++g/app/one')
-  >>> bprint(response.getBody())
-  GET interface registered
+  >>> print(response.getBody())
+  b'GET interface registered'
   >>> response = http_call(wsgi_app(), 'GET', 'http://localhost/++rest++g/app/two')
-  >>> bprint(response.getBody())
-  GET directly registered
+  >>> print(response.getBody())
+  b'GET directly registered'
 
 We should also get a different result for the PUT request::
 
   >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++g/app/one')
-  >>> bprint(response.getBody())
-  PUT interface registered
+  >>> print(response.getBody())
+  b'PUT interface registered'
   >>> response = http_call(wsgi_app(), 'PUT', 'http://localhost/++rest++g/app/two')
-  >>> bprint(response.getBody())
-  PUT directly registered
+  >>> print(response.getBody())
+  b'PUT directly registered'
 
 We expect POST and DELETE to be the same on both. For the directly
 registered object (two) it should fall back to the interface as there
 is none more specifically declared::
 
   >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++g/app/one')
-  >>> bprint(response.getBody())
-  POST interface registered
+  >>> print(response.getBody())
+  b'POST interface registered'
   >>> response = http_call(wsgi_app(), 'POST', 'http://localhost/++rest++g/app/two')
-  >>> bprint(response.getBody())
-  POST interface registered
+  >>> print(response.getBody())
+  b'POST interface registered'
 
   >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++g/app/one')
-  >>> bprint(response.getBody())
-  DELETE interface registered
+  >>> print(response.getBody())
+  b'DELETE interface registered'
   >>> response = http_call(wsgi_app(), 'DELETE', 'http://localhost/++rest++g/app/two')
-  >>> bprint(response.getBody())
-  DELETE interface registered
+  >>> print(response.getBody())
+  b'DELETE interface registered'
 
 Todo:
 

@@ -1,7 +1,6 @@
 import doctest
 import unittest
 
-import six
 from pkg_resources import resource_listdir
 
 import zope.app.wsgi.testlayer
@@ -31,16 +30,15 @@ def http_call(app, method, path, data=None, handle_errors=False, **kw):
     """
     if path.startswith('http://localhost'):
         path = path[len('http://localhost'):]
-    request_string = '{} {} HTTP/1.1\n'.format(method, path)
+    request_string = f'{method} {path} HTTP/1.1\n'
     for key, value in kw.items():
-        request_string += '{}: {}\n'.format(key, value)
+        request_string += f'{key}: {value}\n'
     if data is not None:
-        request_string += 'Content-Length:{}\n'.format(len(data))
+        request_string += f'Content-Length:{len(data)}\n'
         request_string += '\r\n'
         request_string += data
 
-    if six.PY3:  # pragma: PY3
-        request_string = request_string.encode()
+    request_string = request_string.encode()
 
     result = http(app, request_string, handle_errors=handle_errors)
     return result
@@ -54,7 +52,7 @@ def str_http_call(*args, **kw):
 
 def suiteFromPackage(name):
     layer_dir = 'functional'
-    files = resource_listdir(__name__, '{}/{}'.format(layer_dir, name))
+    files = resource_listdir(__name__, f'{layer_dir}/{name}')
     suite = unittest.TestSuite()
     for filename in files:
         if not filename.endswith('.py'):
@@ -62,12 +60,11 @@ def suiteFromPackage(name):
         if filename == '__init__.py':
             continue
 
-        dottedname = 'grokcore.rest.tests.%s.%s.%s' % (
+        dottedname = 'grokcore.rest.tests.{}.{}.{}'.format(
             layer_dir, name, filename[:-3])
         test = doctest.DocTestSuite(
             dottedname,
             extraglobs=dict(
-                bprint=grokcore.rest.testing.bprint,
                 getRootFolder=layer.getRootFolder,
                 http_call=http_call,
                 str_http_call=str_http_call,

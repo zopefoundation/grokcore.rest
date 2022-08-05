@@ -25,13 +25,3 @@ def grok(module_name):
     zcml.do_grok('grokcore.rest.meta', config)
     zcml.do_grok(module_name, config)
     config.execute_actions()
-
-
-def bprint(data):
-    """Python 2 and 3 doctest compatible print.
-
-    http://python3porting.com/problems.html#string-representation
-    """
-    if not isinstance(data, str):
-        data = data.decode()
-    print(data.strip())
