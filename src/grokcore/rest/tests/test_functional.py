@@ -1,13 +1,15 @@
 import doctest
-import grokcore.rest
-import grokcore.rest.testing
-import six
 import unittest
+
+import six
+from pkg_resources import resource_listdir
+
 import zope.app.wsgi.testlayer
 import zope.testbrowser.wsgi
-
-from pkg_resources import resource_listdir
 from zope.app.wsgi.testlayer import http
+
+import grokcore.rest
+import grokcore.rest.testing
 
 
 class Layer(

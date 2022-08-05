@@ -23,17 +23,15 @@ end of the traversal process is, in fact, permitted to display the
 object.
 
 """
-from grokcore.rest.rest import GrokMethodNotAllowed
 from grokcore.view.publication import ZopePublicationSansProxy
-
 from zope import component
-from zope.security.checker import selectChecker
-from zope.publisher.publish import mapply
-from zope.publisher.interfaces.http import IHTTPException
-
 from zope.app.publication.http import HTTPPublication
-from zope.app.publication.requestpublicationfactories import (
-    HTTPFactory)
+from zope.app.publication.requestpublicationfactories import HTTPFactory
+from zope.publisher.interfaces.http import IHTTPException
+from zope.publisher.publish import mapply
+from zope.security.checker import selectChecker
+
+from grokcore.rest.rest import GrokMethodNotAllowed
 
 
 class GrokHTTPPublication(ZopePublicationSansProxy, HTTPPublication):

@@ -48,7 +48,11 @@ ILocation and has the appropriate parent pointer:
 
 """
 import grokcore.component as grok
-from grokcore import view, content, rest, security
+
+from grokcore import content
+from grokcore import rest
+from grokcore import security
+from grokcore import view
 
 
 class Mammoth(content.Model):
