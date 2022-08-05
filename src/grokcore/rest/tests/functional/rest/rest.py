@@ -312,8 +312,13 @@ Todo:
 """  # noqa: E501 line too long
 
 import grokcore.component as grok
-from grokcore import rest, view, security, content
-from zope.interface import Interface, implementer
+from zope.interface import Interface
+from zope.interface import implementer
+
+from grokcore import content
+from grokcore import rest
+from grokcore import security
+from grokcore import view
 
 
 class IFoo(Interface):

@@ -19,9 +19,9 @@ provided here.
 
 """
 import zope.location
-
-from zope import interface
 from grokcore.view import ViewSupport
+from zope import interface
+
 from grokcore.rest.interfaces import IREST
 
 

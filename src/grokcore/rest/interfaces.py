@@ -13,15 +13,13 @@
 ##############################################################################
 """Grok interfaces
 """
-from zope import interface
-from zope.interface.interfaces import IInterface
-
-
 # Expose interfaces from grokcore.* packages as well:
 import grokcore.component.interfaces
-import grokcore.traverser.interfaces
 import grokcore.security.interfaces
+import grokcore.traverser.interfaces
 import grokcore.view.interfaces
+from zope import interface
+from zope.interface.interfaces import IInterface
 
 
 class IBaseClasses(

@@ -6,18 +6,20 @@ been defined.  These all return the HTTP response Method Not Allowed.
 
 """
 import grokcore.component as grok
-import grokcore.rest
 import grokcore.view
-from grokcore.rest.interfaces import IRESTSkinType
-
 from zope import component
 from zope.browser.interfaces import IView
-from zope.interface import Interface, implementer
+from zope.interface import Interface
+from zope.interface import implementer
 from zope.interface.interfaces import ComponentLookupError
 from zope.publisher.browser import applySkin
-from zope.publisher.interfaces.http import IHTTPRequest, MethodNotAllowed
+from zope.publisher.interfaces.http import IHTTPRequest
+from zope.publisher.interfaces.http import MethodNotAllowed
 from zope.traversing.interfaces import TraversalError
 from zope.traversing.namespace import view
+
+import grokcore.rest
+from grokcore.rest.interfaces import IRESTSkinType
 
 
 class GrokMethodNotAllowed(MethodNotAllowed):

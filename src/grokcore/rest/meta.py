@@ -21,16 +21,16 @@ and available as `martian` recursively examines the packages and modules
 of a Grok-based web application.
 
 """
+import grokcore.component
+import grokcore.security
+import grokcore.view
+import martian
+from grokcore.view import make_checker
 from martian.error import GrokError
 from zope import interface
-from grokcore.view import make_checker
 from zope.interface.interface import InterfaceClass
 
-import martian
 import grokcore.rest
-import grokcore.component
-import grokcore.view
-import grokcore.security
 
 
 class RESTGrokker(martian.MethodGrokker):
