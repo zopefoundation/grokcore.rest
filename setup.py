@@ -5,16 +5,14 @@ from setuptools import setup
 
 
 def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+    with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
+        return f.read()
 
 
 long_description = (
-    read('README.txt')
+    read('README.rst')
     + '\n' +
-    read('CHANGES.txt')
-    + '\n' +
-    'Download\n'
-    '********\n'
+    read('CHANGES.rst')
 )
 
 
@@ -24,7 +22,7 @@ tests_require = [
     'grokcore.view[test]',
     'zope.app.appsetup',
     'zope.app.wsgi[test]',
-    'zope.errorview >= 1.2.0',
+    'zope.errorview >= 1.2',
     'zope.testbrowser',
     'zope.testing',
 ]
@@ -34,13 +32,14 @@ setup(
     name='grokcore.rest',
     version='4.0.dev0',
     author='Grok Team',
-    author_email='grok-dev@zope.org',
-    url='http://grok.zope.org',
-    download_url='http://cheeseshop.python.org/pypi/grok/',
+    author_email='zope-dev@zope.dev',
+    url='https://github.com/zopefoundation/grokcore.rest',
+    download_url='https://pypi.org/project/grokcore.rest/',
     description='REST View component for Grok.',
     long_description=long_description,
-    license='ZPL',
+    license='ZPL 2.1',
     classifiers=[
+        'Development Status :: 6 - Mature',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
@@ -73,6 +72,5 @@ setup(
         'zope.interface',
         'zope.publisher >= 4.2.2',
     ],
-    tests_require=tests_require,
     extras_require={'test': tests_require},
 )
